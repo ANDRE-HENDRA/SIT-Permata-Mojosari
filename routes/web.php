@@ -14,5 +14,29 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login', ["title" => "Login"]);
+});
+
+Route::get('/pages', function () {
+    return view('pages.siswa');
+});
+
+Route::get('/kelas', function () {
+    return view('pages.kelas');
+});
+
+Route::get('/tahun', function () {
+    return view('pages.tahun');
+});
+
+Route::get('/jenis', function () {
+    return view('pages.jenis');
+});
+
+Route::get('/pengaturan-akun', function () {
+    return view('pages.setting_akun');
+});
+
+Route::get('/akun', function () {
+    return view('pages.akun');
 });
