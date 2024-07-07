@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return redirect('dashboard');
+});
+
+ROute::controller(LoginController::class)
+->as('auth.')
+->group(function () {
+	Route::get('login','main')->name('login');
+	Route::post('do-login','login')->name('doLogin');
+	Route::get('logout','logout')->name('logout');
+});
+
+Route::middleware('auth')->group(function () {
+	Route::get('dashboard', function () {
+		return view('welcome');
+	})->name('dashboard');
 });
