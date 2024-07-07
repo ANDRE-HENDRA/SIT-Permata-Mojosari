@@ -58,6 +58,10 @@
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                                 hapus
                                             </button>
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#resetakun">
+                                                <i class="fa fa-undo" aria-hidden="true"></i>
+                                                Reset
+                                            </button>
                                         </td>
                                     </tr>
                                     <!-- Edit Modal -->
@@ -128,6 +132,39 @@
                                         </div>
                                     </div>
                                     <!-- delete -->
+
+                                    <!-- Delete Modal -->
+                                    <div class="modal fade" id="resetakun">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Reset Password</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    <form method="post">
+                                                        <h3 align="center">Anda akan me Reset akun <br>
+                                                            <span class="text-warning"><!--panggil nis--> ?></span>
+                                                        </h3>
+
+                                                        <br>
+                                                        <br>
+                                                        <button type="submit" class="btn btn-danger" name="deletesiswa">Ya</button>
+                                                    </form>
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- delete -->
+
                                 </tbody>
                             </table>
                         </div>

@@ -33,10 +33,26 @@ Route::get('/jenis', function () {
     return view('pages.jenis');
 });
 
+Route::get('/data', function () {
+    return view('pages.data');
+});
+
+Route::get('/bayar', function () {
+    return view('pages.bayar');
+});
+
 Route::get('/pengaturan-akun', function () {
     return view('pages.setting_akun');
 });
 
 Route::get('/akun', function () {
     return view('pages.akun');
+});
+
+Route::get('/akun-user', function () {
+    return view('pages.akunUser');
+});
+
+Route::get('/laporan', function () {
+    return view('pages.laporan');
 });

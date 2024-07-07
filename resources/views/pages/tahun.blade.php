@@ -69,19 +69,13 @@
                                                 <div class="modal-body">
                                                     <form method="post">
                                                         <div class="mb-3">
-                                                            <label for="nama" class="form-label">Nama Kelas</label>
-                                                            <input type="text" name="nama" class="form-control" id="nama" value="isi rujuk ke yang tadi" required>
+                                                            <label for="tahunAw" class="form-label">Tahun Awal</label>
+                                                            <input type="text" name="tahunAw" class="form-control" id="tahunAw" value="isi rujuk ke yang tadi" required>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <div class="form-group">
-                                                                <label>Semester</label>
-                                                                <select class="form-control">
-                                                                    <option>Ganjil</option>
-                                                                    <option>Genap</option>
-                                                                </select>
-                                                            </div>
+                                                            <label for="tahunAk" class="form-label">Tahun Akhir</label>
+                                                            <input type="text" name="tahunAk" class="form-control" id="tahunAk" value="isi rujuk ke yang tadi" required>
                                                         </div>
-
                                                         <!-- tempat id editing ndre disini ta terserah wis-->
                                                         <button type="submit" class="btn btn-info" name="updatesiswa">Submit</button>
                                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -111,7 +105,7 @@
                                                 <div class="modal-body">
                                                     <form method="post">
                                                         <h3 align="center">Apakah anda yakin menghapus data ?<br>
-                                                            <span class="text-warning"><!--panggil nama--> ?></span>
+                                                            <span class="text-warning"><!--panggil tahunA--> ?></span>
                                                         </h3>
 
                                                         <br>
@@ -163,17 +157,12 @@
             <div class="modal-body">
                 <form method="post">
                     <div class="mb-3">
-                        <label for="nama" class="form-label">Nama Kelas</label>
-                        <input type="text" name="nama" class="form-control" id="nama" placeholder="Masukan Nama" required>
+                        <label for="tahunAw" class="form-label">Tahun Awal</label>
+                        <input type="text" name="tahunAw" class="form-control" id="tahunAw" placeholder="Masukan Tahun Awal" required>
                     </div>
                     <div class="mb-3">
-                        <div class="form-group">
-                            <label>Semester</label>
-                            <select class="form-control">
-                                <option>Ganjil</option>
-                                <option>Genap</option>
-                            </select>
-                        </div>
+                        <label for="tahunAk" class="form-label">Tahun akhir</label>
+                        <input type="text" name="tahunAk" class="form-control" id="tahunAk" placeholder="Masukan tahunAk" required>
                     </div>
                     <button type="submit" class="btn btn-info" name="addsiswa">Submit</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
