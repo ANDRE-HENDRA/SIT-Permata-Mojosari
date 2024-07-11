@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,7 @@ Route::get('/', function () {
 	return redirect('dashboard');
 });
 
-ROute::controller(LoginController::class)
+Route::controller(LoginController::class)
 ->as('auth.')
 ->group(function () {
 	Route::get('login','main')->name('login');
@@ -26,8 +27,52 @@ ROute::controller(LoginController::class)
 	Route::get('logout','logout')->name('logout');
 });
 
-Route::middleware('auth')->group(function () {
-	Route::get('dashboard', function () {
-		return view('welcome');
-	})->name('dashboard');
+Route::middleware('auth')
+->group(function () {
+	Route::controller(DashboardController::class)
+	->prefix('dashboard')
+	->as('dashboard.')
+	->group(function ($q) {
+		Route::get('/','main')->name('main');
+	});
 });
+
+Route::get('/pages', function () {
+	return view('pages.siswa');
+});
+
+Route::get('/kelas', function () {
+	return view('pages.kelas');
+});
+
+Route::get('/tahun', function () {
+	return view('pages.tahun');
+});
+
+Route::get('/jenis', function () {
+	return view('pages.jenis');
+});
+
+Route::get('/data', function () {
+	return view('pages.data');
+});
+
+Route::get('/bayar', function () {
+	return view('pages.bayar');
+});
+
+Route::get('/pengaturan-akun', function () {
+	return view('pages.setting_akun');
+});
+
+Route::get('/akun', function () {
+	return view('pages.akun');
+});
+
+Route::get('/akun-user', function () {
+	return view('pages.akunUser');
+});
+
+Route::get('/laporan', function () {
+	return view('pages.laporan');
+})->name('dashboard');

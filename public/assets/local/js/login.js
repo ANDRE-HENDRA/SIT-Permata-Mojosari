@@ -8,8 +8,9 @@ $(document).ready(function () {
 });
 
 $('.btnLogin').click((e)=>{
+	e.preventDefault()
 	var data = new FormData($('#formLogin')[0])
-	// console.log(data);
+	$('.btnLogin').attr('disabled',true).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>LOADING...')
 	$.ajax({
 		type: "post",
 		url: routeLogin,
@@ -33,6 +34,7 @@ $('.btnLogin').click((e)=>{
 				text: response.metadata.message,
 			});
 		}
+		$('.btnLogin').attr('disabled',false).html('Login')
 	}).fail((error)=>{
 		Swal.fire({
 			icon: "error",
@@ -40,5 +42,6 @@ $('.btnLogin').click((e)=>{
 			showConfirmButton: false,
 			timer: 1500
 		});
+		$('.btnLogin').attr('disabled',false).html('Login')
 	});
 })
