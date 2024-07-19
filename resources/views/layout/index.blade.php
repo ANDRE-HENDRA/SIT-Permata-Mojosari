@@ -16,8 +16,8 @@
 		@endisset
 	</title>
 </head>
-{{-- <body class="hold-transition @guest login-page @endguest @auth sidebar-mini layout-fixed @endauth"> --}}
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition @guest login-page @endguest @auth sidebar-mini layout-fixed @endauth">
+{{-- <body class="hold-transition sidebar-mini layout-fixed"> --}}
 	
 	<div class="wrapper">
 		@auth
@@ -25,9 +25,18 @@
 		@include('layout.sidebar')
 		@endauth
 		
-		<div class="content-wrapper">
+		@guest
+		<div class="d-flex align-items-center h-100">
 			@yield('content')
 		</div>
+		@endguest
+
+		@auth
+		<div class="content-wrapper pt-2">
+			@include('layout.breadcrumb')
+			@yield('content')
+		</div>
+		@endauth
 		
 		@auth
 		@include('layout.footer')

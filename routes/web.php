@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\TahunAjaranController;
+use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,30 +24,62 @@ Route::get('/', function () {
 });
 
 Route::controller(LoginController::class)
-->as('auth.')
-->group(function () {
-	Route::get('login','main')->name('login');
-	Route::post('do-login','login')->name('doLogin');
-	Route::get('logout','logout')->name('logout');
-});
+	->as('auth.')
+	->group(function () {
+		Route::get('login', 'main')->name('login');
+		Route::post('do-login', 'login')->name('doLogin');
+		Route::get('logout', 'logout')->name('logout');
+	});
 
 Route::middleware('auth')
-->group(function () {
-	Route::controller(DashboardController::class)
-	->prefix('dashboard')
-	->as('dashboard.')
-	->group(function ($q) {
-		Route::get('/','main')->name('main');
+	->group(function () {
+		Route::controller(DashboardController::class)
+			->prefix('dashboard')
+			->as('dashboard.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+			});
+
+		Route::controller(SiswaController::class)
+			->prefix('siswa')
+			->as('siswa.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+				Route::post('/form', 'form')->name('form');
+				Route::post('/store', 'store')->name('store');
+				Route::post('/delete','delete')->name('delete');
+			});
+
+		Route::controller(TahunAjaranController::class)
+			->prefix('tahun-ajaran')
+			->as('tahunAjaran.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+				Route::post('/form','form')->name('form');
+				Route::post('/store','store')->name('store');
+				Route::post('/delete','delete')->name('delete');
+				Route::post('/restore','restore')->name('restore');
+			});
+
+		Route::controller(KelasController::class)
+			->prefix('kelas')
+			->as('kelas.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+				Route::post('/form','form')->name('form');
+				Route::post('/store','store')->name('store');
+				Route::post('/delete','delete')->name('delete');
+				Route::post('/restore','restore')->name('restore');
+			});
 	});
-});
 
 Route::get('/pages', function () {
 	return view('pages.siswa');
 });
 
-Route::get('/kelas', function () {
-	return view('pages.kelas');
-});
+// Route::get('/kelas', function () {
+// 	return view('pages.kelas');
+// });
 
 Route::get('/tahun', function () {
 	return view('pages.tahun');
@@ -76,3 +112,14 @@ Route::get('/akun-user', function () {
 Route::get('/laporan', function () {
 	return view('pages.laporan');
 })->name('dashboard');
+
+Route::controller(TestingController::class)
+	->prefix('testing')
+	->as('testing.')
+	->group(function () {
+		Route::get('/', function () {
+			return 'Nothing';
+		});
+
+		Route::get('/migrate', 'migrate')->name('migrate');
+	});

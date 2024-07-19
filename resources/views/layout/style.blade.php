@@ -22,4 +22,8 @@
 <link rel="stylesheet" href="{{ asset('lte/plugins/daterangepicker/daterangepicker.css') }}">
 <!-- summernote -->
 <link rel="stylesheet" href="{{ asset('lte/plugins/summernote/summernote-bs4.min.css') }}">
+{{-- Datetime --}}
+{{-- <link rel="stylesheet" href="{{ asset('assets/datetime/css/bootstrap-datetimepicker.min.css') }}"/> --}}
+<link rel="stylesheet" href="{{ asset('assets/yearpicker/yearpicker.css') }}">
+{{-- <link rel="stylesheet" href="{{ asset('assets/local/css/custom.css') }}"> --}}
 @endauth

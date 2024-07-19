@@ -47,7 +47,7 @@
 @push('script')
 <script>
 	var routeLogin = "{{route('auth.doLogin')}}"
-	var routeDashboard = "{{route('dashboard')}}"
+	var routeDashboard = "{{route('dashboard.main')}}"
 </script>
 <script src="{{asset('assets/local/js/login.js')}}"></script>
 @endpush

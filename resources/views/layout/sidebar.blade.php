@@ -277,7 +277,7 @@
                 </li>-->
                 <li class="nav-header">Pengolahan Data Siswa</li>
                 <li class="nav-item">
-                    <a href="pages/siswa.blade.php" class="nav-link">
+                    <a href="{{route('siswa.main')}}" class="nav-link">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
                             Siswa
@@ -285,15 +285,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="pages/kelas.blade.php" class="nav-link">
+                    <a href="{{route('kelas.main')}}" class="nav-link">
                         <i class="nav-icon fa fa-university"></i>
                         <p>
                             Kelas
                         </p>
                     </a>
                 </li>
-                               <li class="nav-item">
-                    <a href="pages/taja.blade.php" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{route('tahunAjaran.main')}}" class="nav-link">
                         <i class="nav-icon far fa-calendar-alt"></i>
                         <p>
                             Tahun Ajaran

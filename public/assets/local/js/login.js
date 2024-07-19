@@ -1,12 +1,3 @@
-
-$(document).ready(function () {
-	$.ajaxSetup({
-		headers:{
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
-	})
-});
-
 $('.btnLogin').click((e)=>{
 	e.preventDefault()
 	var data = new FormData($('#formLogin')[0])

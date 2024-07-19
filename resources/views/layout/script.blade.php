@@ -36,3 +36,9 @@
 {{-- <script src="{{ asset('lte/dist/js/demo.js') }}"></script> --}}
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 {{-- <script src="{{ asset('lte/dist/js/pages/dashboard.js') }}"></script> --}}
+
+{{-- Local | Custom --}}
+<script src="{{asset('assets/local/js/custom.js')}}"></script>
+{{-- <script src="{{ asset('assets/datetime/js/bootstrap-datetimepicker.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('assets/datetime/js/bootstrap-datetimepicker.js') }}"></script> --}}
+<script src="{{asset('assets/yearpicker/yearpicker.js')}}"></script>

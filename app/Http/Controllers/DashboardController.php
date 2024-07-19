@@ -9,7 +9,7 @@ class DashboardController extends Controller
 	protected $data;
 
 	public function __construct() {
-		$data['title'] = "Dashboard";
+		$this->data['title'] = "Dashboard";
 	}
 
 	public function main() {
