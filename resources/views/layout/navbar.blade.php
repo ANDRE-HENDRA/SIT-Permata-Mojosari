@@ -29,9 +29,9 @@
                 <i class="fas fa-user-alt"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="logout.php">Profil Akun</a>
+                <a class="dropdown-item" href="{{route('pengaturanAkun.main')}}">Profil Akun</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="logout.php">Logout</a>
+                <a class="dropdown-item" href="{{route('auth.logout')}}">Logout</a>
             </div>
         </li>
     </ul>

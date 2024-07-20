@@ -12,6 +12,10 @@
 							<i class="fa fa-plus-circle" aria-hidden="true"></i>
 							Tambah
 						</button>
+						<button type="button" class="btn btn-warning text-white btnAdd ml-2">
+							<i class="fa fa-file-import" aria-hidden="true"></i>
+							Import
+						</button>
 					</div>
 					<!-- /.card-header -->
 					<div class="card-body">
@@ -119,11 +123,11 @@
 			})
 		}
 	
-		function hapus(id='',ini) {  
+		function hapus(id='',ini,nama='') {  
 			let iniHtml = $(ini).html()
 			Swal.fire({
 				title: "Peringatan!",
-				text: "Data akan dihapus, yakin ingin melakukanya?",
+				html: "<span>Data atas nama <b>"+nama+"</b> akan dihapus, yakin ingin melakukanya?</span>",
 				icon: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#3085d6",

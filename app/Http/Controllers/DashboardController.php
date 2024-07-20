@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -14,6 +15,8 @@ class DashboardController extends Controller
 
 	public function main() {
 		$data = $this->data;
-		return view('pages.dashboard');
+		$data['menuActive'] = 'Dashboard';
+		$data['tahunAjaran'] = TahunAjaran::get();
+		return view('pages.dashboard',$data);
 	}
 }

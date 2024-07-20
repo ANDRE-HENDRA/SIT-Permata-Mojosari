@@ -1,3 +1,8 @@
+@php
+if (!isset($menuActive)) {
+	$menuActive = '...';
+}
+@endphp
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -12,7 +17,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{route('dashboard.main')}}" class="nav-link">
+                    <a href="{{route('dashboard.main')}}" class="nav-link {{$menuActive=='Dashboard'? 'active' :''}}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -277,7 +282,7 @@
                 </li>-->
                 <li class="nav-header">Pengolahan Data Siswa</li>
                 <li class="nav-item">
-                    <a href="{{route('siswa.main')}}" class="nav-link">
+                    <a href="{{route('siswa.main')}}" class="nav-link {{$menuActive=='Siswa'? 'active' :''}}">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
                             Siswa
@@ -285,7 +290,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('kelas.main')}}" class="nav-link">
+                    <a href="{{route('kelas.main')}}" class="nav-link {{$menuActive=='Kelas'? 'active' :''}}">
                         <i class="nav-icon fa fa-university"></i>
                         <p>
                             Kelas
@@ -293,7 +298,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('tahunAjaran.main')}}" class="nav-link">
+                    <a href="{{route('tahunAjaran.main')}}" class="nav-link {{$menuActive=='Tahun Ajaran'? 'active' :''}}">
                         <i class="nav-icon far fa-calendar-alt"></i>
                         <p>
                             Tahun Ajaran
@@ -302,7 +307,7 @@
                 </li>
                 <li class="nav-header">Pengolahan Pembayaran</li>
                 <li class="nav-item">
-                    <a href="pages/jbayar.blade.php" class="nav-link">
+                    <a href="{{route('jenisPembayaran.main')}}" class="nav-link {{$menuActive=='Jenis Pembayaran'? 'active' :''}}">
                         <i class="nav-icon fa fa-tasks"></i>
                         <p>
                             Jenis Pembayaran
@@ -310,7 +315,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="pages/dbayar.blade.php" class="nav-link">
+                    <a href="{{route('pembayaran.main')}}" class="nav-link {{$menuActive=='Data Pembayaran'? 'active' :''}}">
                         <i class="nav-icon fa fa-book"></i>
                         <p>
                             Data Pembayaran
@@ -318,7 +323,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="pages/bayar.blade.php" class="nav-link">
+                    <a href="{{route('bayar.main')}}" class="nav-link {{$menuActive=='Pembayaran'? 'active' :''}}">
                         <i class="nav-icon fa fa-barcode"></i>
                         <p>
                             Pembayaran
@@ -326,16 +331,18 @@
                     </a>
                 </li>
                 <li class="nav-header">Pengolahan Data Akun</li>
+                @if (Auth::user()->level=='administrator')
                 <li class="nav-item">
-                    <a href="pages/akun.blade.php" class="nav-link">
+                    <a href="{{route('user.main')}}" class="nav-link" {{$menuActive=='User'? 'active' :''}}>
                         <i class="nav-icon far fa-user"></i>
                         <p>
                             Akun
                         </p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
-                    <a href="pages/pakun.blade.php" class="nav-link">
+                    <a href="{{route('pengaturanAkun.main')}}" class="nav-link {{$menuActive=='Pengaturan Akun'? 'active' :''}}">
                         <i class="nav-icon fa fa-edit"></i>
                         <p>
                             Pengaturan Akun
@@ -344,7 +351,7 @@
                 </li>
                 <li class="nav-header">Keuangan</li>
                 <li class="nav-item">
-                    <a href="pages/laporan.blade.php" class="nav-link">
+                    <a href="{{route('laporan.main')}}" class="nav-link {{$menuActive=='Laporan Keuangan'? 'active' :''}}">
                         <i class="nav-icon far fa-folder"></i>
                         <p>
                             Laporan Keuangan

@@ -17,6 +17,7 @@ class KelasController extends Controller
 
 	public function main(Request $request) {
 		$data = $this->data;
+		$data['menuActive'] = 'Kelas';
 		if ($request->ajax()) {
 			$data = Kelas::orderBy('id','desc')
 				->with('tahun_ajaran')

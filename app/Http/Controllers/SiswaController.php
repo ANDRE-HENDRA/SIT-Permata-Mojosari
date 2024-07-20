@@ -16,6 +16,7 @@ class SiswaController extends Controller
 
 	public function main(Request $request) {
 		$data = $this->data;
+		$data['menuActive'] = 'Siswa';
 		if ($request->ajax()) {
 			$data = Siswa::orderBy('nama','asc')
 				->get();
@@ -39,7 +40,7 @@ class SiswaController extends Controller
 									<i class="fa fa-pencil-alt" aria-hidden="true"></i>
 									edit
 								</button>';
-					$html .= '<button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapus('.$row->id.',this)">
+					$html .= '<button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapus('.$row->id.',this,`'.$row->nama.'`)">
 									<i class="fa fa-trash" aria-hidden="true"></i>
 									hapus
 								</button>';

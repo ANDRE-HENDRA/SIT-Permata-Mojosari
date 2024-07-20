@@ -25,19 +25,11 @@ class UserSeeder extends Seeder
 				'active' => true,
 			],
 			[
-				'name' => 'Kepala Sekolah', // kepala sekolah
-				'username' => 'kepalasekolah',
-				'email' => 'kepalasekolah@gmail.com',
-				'password' => Hash::make('kepalasekolah'),
-				'level' => 'kepala_sekolah',
-				'active' => true,
-			],
-			[
-				'name' => 'Guru TU', // guru
-				'username' => 'gurutu',
-				'email' => 'gurutu@gmail.com',
-				'password' => Hash::make('gurutu'),
-				'level' => 'guru_tu',
+				'name' => 'Petugas', // guru
+				'username' => 'petugas',
+				'email' => 'petugas@gmail.com',
+				'password' => Hash::make('petugas'),
+				'level' => 'petugas',
 				'active' => true,
 			],
 		];

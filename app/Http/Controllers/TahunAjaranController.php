@@ -16,6 +16,7 @@ class TahunAjaranController extends Controller
 
 	public function main(Request $request) {
 		$data = $this->data;
+		$data['menuActive'] = 'Tahun Ajaran';
 		if ($request->ajax()) {
 			$data = TahunAjaran::orderBy('tahun_awal','desc')->get();
 			return DataTables::of($data)

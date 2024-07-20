@@ -1,11 +1,17 @@
 <?php
 
+use App\Http\Controllers\BayarController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JenisPembayaranController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\PengaturanAkunController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TahunAjaranController;
 use App\Http\Controllers\TestingController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -71,47 +77,91 @@ Route::middleware('auth')
 				Route::post('/delete','delete')->name('delete');
 				Route::post('/restore','restore')->name('restore');
 			});
+
+		Route::controller(PengaturanAkunController::class)
+			->prefix('pengaturan-akun')
+			->as('pengaturanAkun.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+				Route::post('/store', 'store')->name('store');
+				Route::post('/ubah-password', 'ubahPassword')->name('ubahPassword');
+			});
+
+		Route::controller(UserController::class)
+			->prefix('user')
+			->as('user.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+			});
+
+		Route::controller(JenisPembayaranController::class)
+			->prefix('jenis-pembayaran')
+			->as('jenisPembayaran.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+			});
+
+		Route::controller(PembayaranController::class)
+			->prefix('pembayaran')
+			->as('pembayaran.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+			});
+
+		Route::controller(BayarController::class)
+			->prefix('bayar')
+			->as('bayar.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+			});
+
+		Route::controller(LaporanController::class)
+			->prefix('laporan')
+			->as('laporan.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+			});
 	});
 
-Route::get('/pages', function () {
-	return view('pages.siswa');
-});
+// Route::get('/pages', function () {
+// 	return view('pages.siswa');
+// });
 
 // Route::get('/kelas', function () {
 // 	return view('pages.kelas');
 // });
 
-Route::get('/tahun', function () {
-	return view('pages.tahun');
-});
+// Route::get('/tahun', function () {
+// 	return view('pages.tahun');
+// });
 
-Route::get('/jenis', function () {
-	return view('pages.jenis');
-});
+// Route::get('/jenis', function () {
+// 	return view('pages.jenis');
+// });
 
-Route::get('/data', function () {
-	return view('pages.data');
-});
+// Route::get('/data', function () {
+// 	return view('pages.data');
+// });
 
-Route::get('/bayar', function () {
-	return view('pages.bayar');
-});
+// Route::get('/bayar', function () {
+// 	return view('pages.bayar');
+// });
 
-Route::get('/pengaturan-akun', function () {
-	return view('pages.setting_akun');
-});
+// Route::get('/pengaturan-akun', function () {
+// 	return view('pages.setting_akun');
+// });
 
-Route::get('/akun', function () {
-	return view('pages.akun');
-});
+// Route::get('/akun', function () {
+// 	return view('pages.akun');
+// });
 
-Route::get('/akun-user', function () {
-	return view('pages.akunUser');
-});
+// Route::get('/akun-user', function () {
+// 	return view('pages.akunUser');
+// });
 
-Route::get('/laporan', function () {
-	return view('pages.laporan');
-})->name('dashboard');
+// Route::get('/laporan', function () {
+// 	return view('pages.laporan');
+// })->name('dashboard');
 
 Route::controller(TestingController::class)
 	->prefix('testing')
