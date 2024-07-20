@@ -92,6 +92,10 @@ Route::middleware('auth')
 			->as('user.')
 			->group(function () {
 				Route::get('/', 'main')->name('main');
+				Route::post('/form', 'form')->name('form');
+				Route::post('/store', 'store')->name('store');
+				Route::post('/delete', 'delete')->name('delete');
+				Route::post('/reset', 'reset')->name('reset');
 			});
 
 		Route::controller(JenisPembayaranController::class)
