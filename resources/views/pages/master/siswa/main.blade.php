@@ -12,7 +12,7 @@
 							<i class="fa fa-plus-circle" aria-hidden="true"></i>
 							Tambah
 						</button>
-						<button type="button" class="btn btn-warning text-white btnAdd ml-2">
+						<button type="button" class="btn btn-warning text-white btnImport ml-2">
 							<i class="fa fa-file-import" aria-hidden="true"></i>
 							Import
 						</button>

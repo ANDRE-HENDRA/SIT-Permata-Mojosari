@@ -25,7 +25,12 @@
 							<div class="form-group row">
 								<label for="password" class="col-sm-2 col-form-label">Password</label>
 								<div class="col-sm-10">
-									<input type="password" class="form-control" id="password" name="password" placeholder="password anda" >
+									<div class="input-group">
+										<input type="password" class="form-control border-end-0" id="password" name="password" placeholder="password anda" >
+										<div class="input-group-append" id="show_hide_password">
+											<a href="javascript:;" class="input-group-text bg-transparent" onclick="ubahPassword(this)"><i class='fa fa-eye-slash'></i></a>
+										</div>
+									</div>
 								</div>
 							</div>
 						</form>

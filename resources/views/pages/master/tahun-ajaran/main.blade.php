@@ -115,11 +115,11 @@
 		})
 	}
 
-	function hapus(id='',ini) {  
+	function hapus(id='',ini,nama='') {  
 		let iniHtml = $(ini).html()
 		Swal.fire({
 			title: "Peringatan!",
-			text: "Data akan dihapus, yakin ingin melakukanya?",
+			html: `<span>Data <b>${nama}</b> akan dihapus, yakin ingin melakukanya?</span>`,
 			icon: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",

@@ -19,8 +19,43 @@
                         </ul>
                         <div class="tab-content" id="custom-content-below-tabContent">
                             <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
-                                <div class="col-sm-4 mt-3">
-                                    <a href="#"><button class="btn btn-success"><i class="fa fa-print"></i> Print</button></a>
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="far fa-calendar-alt"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control float-right" id="jarakTanggal">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control" name="tahun_ajaran_id" id="tahun_ajaran_id">
+                                            @foreach ($tahunAjaran as $item)
+                                                <option value="{{$item->id}}">{{$item->tahun_awal.'/'.$item->tahun_akhir}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control" name="kelas_id" id="kelas_id">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control" name="jenis_pembayaran" id="jenis_pembayaran">
+                                            <option>SPP</option>
+                                            <option>DPP</option>
+                                            <option>Seragam</option>
+                                            <option>Buku</option>
+                                            <option>Sarana dan Prasarana</option>
+                                            <option>Infaq</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="#"><button class="btn btn-success"><i class="fa fa-print"></i> Print</button></a>
+                                    </div>
                                 </div>
                                 <!-- tabel -->
                                 <div class="card-body">
@@ -187,3 +222,19 @@
     </div>
 </section>
 @endsection
+@push('script')
+<script>
+    var kelas = {{Js::From($kelas)}};
+    $('#jarakTanggal').daterangepicker()
+    $('#tahun_ajaran_id').change(function (e) { 
+        e.preventDefault();
+        $('#kelas_id').html('');
+        let tahunAjaranId = $('#tahun_ajaran_id').val()
+        $.each(kelas, function (index, value) { 
+            if (value.tahun_ajaran_id == tahunAjaranId) {
+                $('#kelas_id').append(`<option value='${value.id}'>${value.nama}</option>`)
+            }
+        });
+    });
+</script>
+@endpush

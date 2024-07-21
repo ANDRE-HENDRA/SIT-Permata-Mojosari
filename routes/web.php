@@ -8,6 +8,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PengaturanAkunController;
+use App\Http\Controllers\ReferenceController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TahunAjaranController;
 use App\Http\Controllers\TestingController;
@@ -103,6 +104,7 @@ Route::middleware('auth')
 			->as('jenisPembayaran.')
 			->group(function () {
 				Route::get('/', 'main')->name('main');
+				Route::post('/form', 'form')->name('form');
 			});
 
 		Route::controller(PembayaranController::class)
@@ -124,6 +126,13 @@ Route::middleware('auth')
 			->as('laporan.')
 			->group(function () {
 				Route::get('/', 'main')->name('main');
+			});
+
+		Route::controller(ReferenceController::class)
+			->prefix('reference')
+			->as('reference.')
+			->group(function () {
+				Route::post('/get-kelas-by-tahun-ajaran', 'getKelasByTahunAjaran')->name('getKelasByTahunAjaran');
 			});
 	});
 

@@ -30,7 +30,7 @@ class TahunAjaranController extends Controller
 									<i class="fa fa-pencil-alt" aria-hidden="true"></i>
 									edit
 								</button>';
-					$html .= '<button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapus('.$row->id.',this)">
+					$html .= '<button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapus('.$row->id.',this,`'.$row->tahun_awal.'/'.$row->tahun_akhir.'`)">
 									<i class="fa fa-trash" aria-hidden="true"></i>
 									hapus
 								</button>';

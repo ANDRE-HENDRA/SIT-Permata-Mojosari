@@ -28,12 +28,13 @@ class KelasController extends Controller
 					return $row->tahun_ajaran?$row->tahun_ajaran->tahun_awal.'/'.$row->tahun_ajaran->tahun_akhir:'-';
 				})
 				->addColumn('actions',function ($row) {
+					$tahunAjaran = $row->tahun_ajaran?$row->tahun_ajaran->tahun_awal.'/'.$row->tahun_ajaran->tahun_akhir:'-';
 					$html = '';
 					$html .= '<button type="button" class="btn btn-success btn-sm" onclick="edit('.$row->id.',this)">
 									<i class="fa fa-pencil-alt" aria-hidden="true"></i>
 									edit
 								</button>';
-					$html .= '<button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapus('.$row->id.',this)">
+					$html .= '<button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapus('.$row->id.',this,`'.$row->nama.' ('.$tahunAjaran.')`)">
 									<i class="fa fa-trash" aria-hidden="true"></i>
 									hapus
 								</button>';

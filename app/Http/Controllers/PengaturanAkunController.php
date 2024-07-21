@@ -77,10 +77,10 @@ class PengaturanAkunController extends Controller
 			return ['status' => 'fail', 'message' => 'Gagal mengupdate, data tidak ditemukan'];
 		}
 		if(!Hash::check($request->password_lama,$user->password)){
-			return ['status' => 'fail', 'message' => 'Gagal mengupdate, password yang anda masukkan salah'];
+			return ['status' => 'fail', 'message' => 'Password lama anda tidak sesuai / tidak valid'];
 		}
 		if($request->password_baru != $request->ulangi_password_baru){
-			return ['status' => 'fail', 'message' => 'Gagal mengupdate, Password baru tidak sama'];
+			return ['status' => 'fail', 'message' => 'Password baru yang anda masukkan tidak sama'];
 		}
 		$user->password = Hash::make($request->password_baru);
 		if (!$user->save()) {
