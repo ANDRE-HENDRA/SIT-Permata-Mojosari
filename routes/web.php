@@ -151,6 +151,7 @@ Route::middleware('auth')
 			->as('laporan.')
 			->group(function () {
 				Route::get('/', 'main')->name('main');
+				Route::get('/import', 'import')->name('import');
 			});
 
 		Route::controller(ReferenceController::class)

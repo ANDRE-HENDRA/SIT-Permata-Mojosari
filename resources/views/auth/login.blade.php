@@ -6,6 +6,7 @@
 		<div class="card-header text-center">
 			<a href="#" class="h1"><b>SIT Permata Mulia</b><br>Mojosari</a>
 			<br><img src="{{ asset('img')}}/logo.jpeg" alt="SIT Permata Mojosari" height="100" width="100">
+			<img src="{{ asset('img')}}/logo2.jpeg" alt="SIT Permata Mojosari" height="100" width="100">
 		</div>
 		<div class="card-body">
 			<p class="login-box-msg">Masukkan Username dan Password</p>

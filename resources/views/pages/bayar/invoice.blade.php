@@ -112,8 +112,9 @@
 				<div class="row">
 					<div class="receipt-header">
 						<div class="col-xs-6 col-sm-6 col-md-6">
-							<div class="receipt-left">
+							<div class="receipt-left" style="display: flex">
 								<img class="img-responsive" alt="iamgurdeeposahan" src="{{asset('img/logo.jpeg')}}" style="width: 71px; border-radius: 43px;">
+								<img class="img-responsive" alt="iamgurdeeposahan" src="{{asset('img/logo2.jpeg')}}" style="width: 71px; border-radius: 43px;">
 							</div>
 						</div>
 						<div class="col-xs-6 col-sm-6 col-md-6 text-right">
@@ -131,15 +132,17 @@
 					<div class="receipt-header receipt-header-mid">
 						<div class="col-xs-8 col-sm-8 col-md-8 text-left">
 							<div class="receipt-right">
-								<h5>nama siswa </h5>
-								<p><b>Mobile :</b> +1 12345-4569</p>
-								<p><b>Email :</b> customer@gmail.com</p>
-								<p><b>Address :</b> New York, USA</p>
+								<P><b>Nama :</b> {{$transaksi->siswa->nama}}</P>
+								<p><b>Nis :</b> {{$transaksi->siswa->nis}}</p>
+								<p><b>Nisn :</b> {{$transaksi->siswa->nisn}}</p>
+								<p><b>Kelas :</b> {{$transaksi->kelas}}</p>
+								<p><b>Jenis Pembayaran :</b> {{$transaksi->jenis_pembayaran}}</p>
+								<p><b>Tanggal transaksi :</b> {{$transaksi->tanggal_transaksi}}</p>
 							</div>
 						</div>
 						<div class="col-xs-4 col-sm-4 col-md-4">
 							<div class="receipt-left">
-								<h3>INVOICE # 102</h3>
+								<h3>INVOICE # {{$transaksi->kode}}</h3>
 							</div>
 						</div>
 					</div>
@@ -149,57 +152,21 @@
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th>Description</th>
-								<th>Amount</th>
+								<th width="70%">Deskripsi</th>
+								<th width="30%">Nominal</th>
 							</tr>
 						</thead>
 						<tbody>
+							@foreach ($transaksi->pembayaran->detail_pembayaran as $item)
 							<tr>
-								<td class="col-md-9">Payment for August 2016</td>
-								<td class="col-md-3"><i class="fa fa-inr"></i> 15,000/-</td>
+								<td class="col-md-9">{{$item->keterangan}}</td>
+								<td class="col-md-3"><i class="fa fa-inr"></i> {!! Help::currencyFormatDecimal($item->nominal) !!}</td>
 							</tr>
-							<tr>
-								<td class="col-md-9">Payment for June 2016</td>
-								<td class="col-md-3"><i class="fa fa-inr"></i> 6,00/-</td>
-							</tr>
-							<tr>
-								<td class="col-md-9">Payment for May 2016</td>
-								<td class="col-md-3"><i class="fa fa-inr"></i> 35,00/-</td>
-							</tr>
-							<tr>
-								<td class="text-right">
-									<p>
-										<strong>Total Amount: </strong>
-									</p>
-									<p>
-										<strong>Late Fees: </strong>
-									</p>
-									<p>
-										<strong>Payable Amount: </strong>
-									</p>
-									<p>
-										<strong>Balance Due: </strong>
-									</p>
-								</td>
-								<td>
-									<p>
-										<strong><i class="fa fa-inr"></i> 65,500/-</strong>
-									</p>
-									<p>
-										<strong><i class="fa fa-inr"></i> 500/-</strong>
-									</p>
-									<p>
-										<strong><i class="fa fa-inr"></i> 1300/-</strong>
-									</p>
-									<p>
-										<strong><i class="fa fa-inr"></i> 9500/-</strong>
-									</p>
-								</td>
-							</tr>
+							@endforeach
 							<tr>
 								
 								<td class="text-right"><h2><strong>Total: </strong></h2></td>
-								<td class="text-left text-danger"><h2><strong><i class="fa fa-inr"></i> 31.566/-</strong></h2></td>
+								<td class="text-left text-danger"><h2><strong><i class="fa fa-inr"></i> {!! Help::currencyFormatDecimal($transaksi->nominal) !!}</strong></h2></td>
 							</tr>
 						</tbody>
 					</table>
@@ -209,8 +176,8 @@
 					<div class="receipt-header receipt-header-mid receipt-footer">
 						<div class="col-xs-8 col-sm-8 col-md-8 text-left">
 							<div class="receipt-right">
-								<p><b>Date :</b> 15 Aug 2016</p>
-								<h5 style="color: rgb(140, 140, 140);">Thanks for shopping.!</h5>
+								<p><b>Date :</b>{{$transaksi->tanggal_transaksi}}</p>
+								<h5 style="color: rgb(140, 140, 140);">SIT Permata Meri</h5>
 							</div>
 						</div>
 						<div class="col-xs-4 col-sm-4 col-md-4">

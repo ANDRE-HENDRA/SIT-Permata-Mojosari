@@ -226,11 +226,10 @@ class BayarController extends Controller
 	}
 
 	public function invoice($id=1) {
-		$data['transaksi'] = Transaksi::with(['pembayaran'=>function ($q) {
-				$q->withTrashed()
-				->with('kelas');
+		$data['transaksi'] = Transaksi::with('siswa')
+			->with(['pembayaran'=>function ($q) {
+				$q->with('detail_pembayaran');
 			}])
-			->with('siswa')
 			->find($id);
 		return view('pages.bayar.invoice',$data);
 	}
