@@ -305,6 +305,14 @@ if (!isset($menuActive)) {
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('kelasSiswa.main')}}" class="nav-link {{$menuActive=='Kelas Siswa'? 'active' :''}}">
+                        <i class="nav-icon fa fa-university"></i>
+                        <p>
+                            Kelas Siswa
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-header">Pengolahan Pembayaran</li>
                 <li class="nav-item">
                     <a href="{{route('jenisPembayaran.main')}}" class="nav-link {{$menuActive=='Jenis Pembayaran'? 'active' :''}}">

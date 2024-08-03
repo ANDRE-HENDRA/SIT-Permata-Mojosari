@@ -4,6 +4,7 @@ use App\Http\Controllers\BayarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JenisPembayaranController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\KelasSiswaController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PembayaranController;
@@ -79,6 +80,17 @@ Route::middleware('auth')
 				Route::post('/restore','restore')->name('restore');
 			});
 
+			Route::controller(KelasSiswaController::class)
+			->prefix('kelas-siswa')
+			->as('kelasSiswa.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+				Route::post('/form','form')->name('form');
+				Route::post('/store','store')->name('store');
+				Route::post('/cari-siswa','cariSiswa')->name('cariSiswa');
+				Route::post('/get-siswa','getSiswa')->name('getSiswa');
+			});
+
 		Route::controller(PengaturanAkunController::class)
 			->prefix('pengaturan-akun')
 			->as('pengaturanAkun.')
@@ -105,6 +117,8 @@ Route::middleware('auth')
 			->group(function () {
 				Route::get('/', 'main')->name('main');
 				Route::post('/form', 'form')->name('form');
+				Route::post('/store', 'store')->name('store');
+				Route::post('/delete', 'delete')->name('delete');
 			});
 
 		Route::controller(PembayaranController::class)
@@ -112,6 +126,9 @@ Route::middleware('auth')
 			->as('pembayaran.')
 			->group(function () {
 				Route::get('/', 'main')->name('main');
+				Route::post('/form', 'form')->name('form');
+				Route::post('/store', 'store')->name('store');
+				Route::post('/delete', 'delete')->name('delete');
 			});
 
 		Route::controller(BayarController::class)
@@ -119,6 +136,14 @@ Route::middleware('auth')
 			->as('bayar.')
 			->group(function () {
 				Route::get('/', 'main')->name('main');
+				Route::post('/jenis-pembayaran', 'jenisPembayaran')->name('jenisPembayaran');
+				Route::post('/tagihan-siswa', 'tagihanSiswa')->name('tagihanSiswa');
+				Route::post('/form', 'form')->name('form');
+				Route::post('/store', 'store')->name('store');
+				Route::post('/cari-siswa', 'cari_siswa')->name('cari_siswa');
+				Route::post('/get-siswa', 'getSiswa')->name('getSiswa');
+				Route::get('/invoice/{id?}', 'invoice')->name('invoice');
+				Route::post('/get-tagihan', 'getTagihan')->name('getTagihan');
 			});
 
 		Route::controller(LaporanController::class)

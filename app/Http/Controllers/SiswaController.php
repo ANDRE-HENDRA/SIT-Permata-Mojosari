@@ -19,6 +19,9 @@ class SiswaController extends Controller
 		$data['menuActive'] = 'Siswa';
 		if ($request->ajax()) {
 			$data = Siswa::orderBy('nama','asc')
+				// ->when((!isset($request->tingkat) || empty($request->tingkat)),function ($q) {
+				// 	$q->whereRaw('1=0');
+				// })
 				->get();
 			return DataTables::of($data)
 				->addIndexColumn()

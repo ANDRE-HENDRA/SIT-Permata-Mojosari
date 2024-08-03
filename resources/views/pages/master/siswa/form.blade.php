@@ -23,7 +23,7 @@
 					</div>
 					<div class="mb-3">
 						<label for="nisn" class="form-label">NISN</label>
-						<input type="text" name="nisn" class="form-control" id="nisn" @isset($siswa) value="{{$siswa->nisn}}" @endisset placeholder="silahkan masukkan NISN" required>
+						<input type="text" name="nisn" class="form-control" id="nisn" onkeyup="hanyaAngka(this)" @isset($siswa) value="{{$siswa->nisn}}" @endisset placeholder="silahkan masukkan NISN" required>
 					</div>
 					<div class="mb-3">
 						<div class="form-group">

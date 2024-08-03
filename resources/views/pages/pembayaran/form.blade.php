@@ -1,7 +1,7 @@
 
 <!-- The Modal Tambah Siswa -->
 <div class="modal fade" id="tambahTahun">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
 			
 			<!-- Modal Header -->
@@ -12,67 +12,74 @@
 			
 			<!-- Modal body -->
 			<div class="modal-body">
-				<form id="formTahun">
-					<input type="hidden" name="id" @isset($tahunAjaran) value="{{$tahunAjaran->id}}" @endisset>
+				<form id="formPembayaran">
+					<input type="hidden" name="id" @isset($pembayaran) value="{{$pembayaran->id}}" @endisset>
 					<div class="row">
-						<div class="col-12">
+						<div class="col-12 col-md-6">
 							<div class="form-group">
-								<label for="exampleInputEmail1">Nama Transaksi</label>
-								<input type="text" class="form-control" id="exampleInputEmail1" placeholder="nama">
+								<label for="nama">Nama Transaksi</label>
+								<input type="text" class="form-control" id="nama" placeholder="nama" name="nama" @isset($pembayaran) value="{{$pembayaran->nama}}" @endisset>
 							</div>
-							
 						</div>
-						<div class="col-12 mb-3">
-							<label>Dibayarkan</label>
-							<select name="periode" id="periode" class="form-control">
-								<option value="periode">Periode</option>
-								<option value="tanggal">Sekali</option>
-							</select>
-						</div>
-						<div class="col-12 mb-3" id="periode-form">
+						<div class="col-12 col-md-6">
 							<div class="form-group">
-								<label>Periode</label>
-								<select name="pp" id="pp" class="form-control">
-									<option value="1">Januari</option>
-									<option value="1">Februari</option>
-									<option value="1">Maret</option>
-									<option value="1">April</option>
-									<option value="1">Mei</option>
-									<option value="1">Juni</option>
-									<option value="1">Juli</option>
-									<option value="1">Agustus</option>
-									<option value="1">September</option>
-									<option value="1">Oktober</option>
-									<option value="1">November</option>
-									<option value="1">Desember</option>
+								<label>Jenis Pembayaran</label>
+								<select name="jenis_pembayaran_id" id="jenis_pembayaran_id" class="form-control" @isset($pembayaran) disabled @endisset>
+									<option value="">- Pilih -</option>
+									@foreach ($jenisPembayaran as $item)
+										<option value="{{$item->id}}" @isset($pembayaran) @if ($pembayaran->jenis_pembayaran_id==$item->id) selected @endif @endisset>{{$item->nama.' ('.$item->kode.')'}}</option>
+									@endforeach
 								</select>
-							  </div>
+							</div>
 						</div>
-						<div class="col-12 mb-3" id="tanggal-form">
+						<div class="col-12 col-md-6">
 							<div class="form-group">
-								<label>Tanggal</label>
-								  <div class="input-group date" id="reservationdate" data-target-input="nearest">
-									  <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"/>
-									  <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-										  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-									  </div>
-								  </div>
-							  </div>
+								<label for="nominal">Nominal</label>
+								<input type="text" class="form-control" id="nominal" placeholder="nominal" name="nominal" onkeyup="ubahFormatRupiah(this)" @isset($pembayaran) value="{!! Help::currencyFormatDecimal($pembayaran->nominal) !!}" @endisset>
+							</div>
 						</div>
-						<div class="col-12 mb-3">
-							<label for="">Target Siswa Kelas</label>
-							<select name="target-kelas[]" id="target-kelas" class="form-control multiple-select">
-								@foreach ($kelas as $item)
-									<option value="">{{$item->nama.'('.$item->tahun_ajaran->tahun_awal.'/'.$item->tahun_ajaran->tahun_akhir.')'}}</option>
-								@endforeach
-							</select>
+						<br>
+						<div class="col-12">
+							<label><u><i>Target Siswa</i></u></label>
 						</div>
-						<div class="col-12 mb-3">
-							<label for="">Jenis</label>
-							<select name="wajib" id="wajib" class="form-control">
-								<option value="">Wajib</option>
-								<option value="">Tidak Wajin</option>
-							</select>
+						<div class="col-12 col-md-6">
+							<div class="form-group">
+								<label>Kelas</label>
+								<select name="kelas[]" id="kelas" class="form-control select2" data-placeholder="- Pilih -" multiple="multiple" style="width: 100%">
+									@foreach ($kelas as $item)
+										<option value="{{$item->id}}">{{$item->nama.' ('.$item->tahun_ajaran->tahun_awal.'/'.$item->tahun_ajaran->tahun_akhir.')'}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						<div class="col-12 col-md-6">
+							<div class="form-group">
+								<label>Jenis Kelamin</label>
+								<select name="jenis_kelamin" id="jenis_kelamin" class="form-control">
+									<option value="">- Pilih -</option>
+									<option value="semua" @isset($pembayaran) @if ($pembayaran->is_l=='L'&&$pembayaran->is_p=='P') selected @endif @endisset>Semua</option>
+									<option value="L" @isset($pembayaran) @if ($pembayaran->is_l=='L'&&$pembayaran->is_p!='P') selected @endif @endisset>Laki-laki</option>
+									<option value="P" @isset($pembayaran) @if ($pembayaran->is_l!='L'&&$pembayaran->is_p=='P') selected @endif @endisset>Perempuan</option>
+								</select>
+							</div>
+						</div>
+						<br>
+						<div class="col-12 d-flex">
+							<label><u><i>Detail</i></u></label>
+							<button class="btn btn-success btnPlus ml-auto">+</button>
+						</div>
+						<div class="col-12">
+							<table class="table table-borderless" id="tableDetail">
+								<thead>
+									<tr>
+										<th width="70%">Keterangan</th>
+										<th width="20%">Nominal</th>
+										<th width="10%">Hapus</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</form>
@@ -80,7 +87,7 @@
 			
 			<!-- Modal footer -->
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-info">Submit</button>
+				<button type="submit" class="btn btn-info btnSimpan">Submit</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -90,28 +97,41 @@
 <script>
 	var modalSiswa = $('#tambahTahun'),
 	btnSimpan = $('.btnSimpan'),
+	btnPlus = $('.btnPlus'),
 	btnSimpanHtml = $(btnSimpan).html(),
-	routeStore = "{{route('tahunAjaran.store')}}",
-	tahunAwal = "{{!empty($tahunAjaran)?$tahunAjaran->tahun_awal:date('Y')}}",
-	tahunAkhir = "{{!empty($tahunAjaran)?$tahunAjaran->tahun_akhir:date('Y',strtotime('+1 year'))}}";
+	routeStore = "{{route('pembayaran.store')}}",
+	pembayaranKelas = "{{!empty($pembayaranKelas)?$pembayaranKelas:''}}",
+	detailPembayaran = new Array()
+	@isset($pembayaran)
+	detailPembayaran = JSON.parse(`{!! json_encode($pembayaran->detail_pembayaran) !!}`)
+	@endisset
 	$(function () {
 		modalSiswa.modal({
 			backdrop: 'static',
 			show: true
 		})
+		$('#kelas').select2({
+			dropdownParent: modalSiswa
+		});
+		$('#kelas').val(pembayaranKelas.split(',')).trigger('change')
 		$('#periode-form').show();
-		$('#tanggal-form').hide();
+		// $('#tanggal-form').hide();
+		$('[data-toggle="tooltip"]').tooltip()
+		// console.log(detailPembayaran);
+		$.each(detailPembayaran, function (indexInArray, valueOfElement) { 
+			appendDetail(indexInArray,valueOfElement.id,valueOfElement.keterangan,valueOfElement.nominal)
+		});
 	});
 
-	$('#periode').change(function (e) { 
+	$('#is_loop').change(function (e) { 
 		e.preventDefault();
-		if ($('#periode').val()=='periode') {
+		if ($('#is_loop').val()=='true') {
 			$('#periode-form').show();
-			$('#tanggal-form').hide();
+			// $('#tanggal-form').hide();
 			return
 		}
 		$('#periode-form').hide();
-		$('#tanggal-form').show();
+		// $('#tanggal-form').show();
 	});
 
     $('#reservationdate').datetimepicker({
@@ -121,7 +141,7 @@
 	$(btnSimpan).click(function (e) { 
 		e.preventDefault();
 		$(btnSimpan).html(spinnerSr);
-		var data = new FormData($('#formTahun')[0])
+		var data = new FormData($('#formPembayaran')[0])
 		$.ajax({
 			type: "post",
 			url: routeStore,
@@ -156,8 +176,55 @@
 		})
 		.fail((err)=>{
 			$(btnSimpan).html(btnSimpanHtml);
-			swalError(err.response.message)
+			swalError()
 		});
 	});
 
+	$(btnPlus).click(async function (e) { 
+		e.preventDefault();
+		let nowIndex = $('.detail').length
+		await appendDetail(nowIndex)
+	});
+
+	// $('.btnMinus').click(function (e) { 
+	// 	e.preventDefault();
+	// 	console.log();
+	// });
+	async function minusDetail(btn,event) {
+		event.preventDefault()
+		// console.log($(btn).data('index'));
+		let curLength = $('.detail').length
+		let minusIndex = $(btn).data('index');
+		await $(`#detail_${minusIndex}`).remove();
+		console.log(minusIndex);
+		for (let index = 0; index < curLength; index++) {
+			if (index<minusIndex) {
+				console.log('continue');
+				continue
+			}
+			if ($(`#detail_${index+1}`).length) {
+				console.log('yield');
+				await appendDetail(index,$(`id_${index+1}`).val(),$(`keterangan_${index+1}`).html(),$(`#nominal_${index+1}`).val())
+				await $(`#detail_${index+1}`).remove();
+			}
+		}
+	}
+
+	async function appendDetail(index,detail_id='',keterangan='',nominal='') {
+		let rupiah = formatRupiah(nominal, "Rp. ")
+		let html = `
+			<tr class="detail" id="detail_${index}">
+				<td>
+					<input type="hidden" name="detail[${index}][id]" id="id_${index}" value="${detail_id}">
+					<textarea class="form-control" name="detail[${index}][keterangan]" id="keterangan_${index}" rows="1">${keterangan}</textarea>
+				</td>
+				<td>
+					<input type="text" class="form-control" name="detail[${index}][nominal]" id="nominal_${index}" placeholder="nominal" onkeyup="ubahFormatRupiah(this)" value="${rupiah}">
+				</td>
+				<td>
+					<button class="btn btn-sm btn-danger" onclick="minusDetail(this,event)" data-index="${index}"><i class="fa fa-trash" aria-hidden="true"></i></button>
+				</td>
+			</tr>`
+		await $('#tableDetail tbody').append(html);
+	}
 </script>

@@ -1,4 +1,7 @@
 @extends('layout.index')
+@push('style')
+	@include('layout.datatableCSS')
+@endpush
 @section('content')
 <section class="content">
     <div class="container-fluid">
@@ -59,11 +62,11 @@
                                 </div>
                                 <!-- tabel -->
                                 <div class="card-body">
-                                    <table class="table table-bordered table-hover">
+                                    <table class="table table-bordered table-hover" id="datatable-harian">
                                         <thead>
                                             <tr>
                                                 <th style="width: 50px;">No</th>
-                                                <th>NIS</th>
+                                                <th>NIS/NISN</th>
                                                 <th>Nama</th>
                                                 <th>Kelas</th>
                                                 <th>Tahun Ajaran</th>
@@ -73,34 +76,6 @@
                                                 <th>Keterangan</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>101100</td>
-                                                <td>Sultan Agung</td>
-                                                <td>TK A1</td>
-                                                <td>2024/2025</td>
-                                                <td>SPP</td>
-                                                <td>Harini</td>
-                                                <td>100.000</td>
-                                                <td>
-                                                    <span class="badge badge-success">Lunas</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>101100</td>
-                                                <td>Airlangga hartarto</td>
-                                                <td>TK A1</td>
-                                                <td>2024/2025</td>
-                                                <td>SPP</td>
-                                                <td>Harini</td>
-                                                <td>100.000</td>
-                                                <td>
-                                                    <span class="badge badge-danger">Belum Lunas</span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
                                     </table>
                                 </div>
                                 <!-- /tabel -->
@@ -125,34 +100,6 @@
                                                 <th>Keterangan</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>101100</td>
-                                                <td>Sultan Agung</td>
-                                                <td>TK A1</td>
-                                                <td>2024/2025</td>
-                                                <td>SPP</td>
-                                                <td>Harini</td>
-                                                <td>100.000</td>
-                                                <td>
-                                                    <span class="badge badge-success">Lunas</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>101100</td>
-                                                <td>Airlangga hartarto</td>
-                                                <td>TK A1</td>
-                                                <td>2024/2025</td>
-                                                <td>SPP</td>
-                                                <td>Harini</td>
-                                                <td>100.000</td>
-                                                <td>
-                                                    <span class="badge badge-danger">Belum Lunas</span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
                                     </table>
                                 </div>
                                 <!-- /tabel -->
@@ -223,8 +170,13 @@
 </section>
 @endsection
 @push('script')
+@include('layout.datatableJS')
 <script>
-    var kelas = {{Js::From($kelas)}};
+    var kelas = {{Js::From($kelas)}},
+	route = "{{route('laporan.main')}}"
+    $(async function () {
+        await dataTable()
+    });
     $('#jarakTanggal').daterangepicker()
     $('#tahun_ajaran_id').change(function (e) { 
         e.preventDefault();
@@ -236,5 +188,36 @@
             }
         });
     });
+    
+	async function dataTable() {
+		await $('#datatable-harian').DataTable({
+			stateSave: false,
+			scrollX: false,
+			serverSide: true,
+			processing: true,
+			destroy: true,
+			language: {
+				// processing: spinner+' '+spinner+' '+spinner,
+				search: 'Pencarian',
+				searchPlaceholder: 'Masukkan kata kunci',
+			},
+			ajax: {
+				url: route
+			},
+			columns: [
+			{data:'DT_RowIndex', name:'DT_RowIndex', render: (data, type, row)=>{
+				return `<p class="m-0 p-1">${data}</p>`
+			}},
+			{data:'nis', name:'nis'},
+			{data:'nama', name:'nama'},
+			{data:'kelas', name:'kelas'},
+			{data:'tahun_ajaran', name:'tahun_ajaran'},
+			{data:'jenis', name:'jenis'},
+			{data:'tanggal_transaksi', name:'tanggal_transaksi'},
+			{data:'nominal', name:'nominal'},
+			{data:'keterangan', name:'keterangan'}
+			],
+		})
+	}
 </script>
 @endpush

@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class KelasSiswa extends Model
+class PembayaranKelas extends Model
 {
 	use HasFactory;
-	protected $table = 'kelas_siswa';
+	use SoftDeletes;
+	public $table = 'pembayaran_kelas';
 
-	public function siswa() {
-		return $this->belongsTo(Siswa::class,'siswa_id');
+	public function pembayaran() {
+		return $this->belongsTo(Pembayaran::class,'pembayaran_id');
 	}
 
 	public function kelas() {
