@@ -16,7 +16,7 @@ class CreateSiswaTable extends Migration
 		Schema::create('siswa', function (Blueprint $table) {
 			$table->id();
 			$table->string('nama');
-			$table->string('nis')->unique();
+			$table->string('nis');
 			$table->string('nisn')->nullable();
 			$table->string('jenis_kelamin',1);
 			$table->string('tahun_masuk');
@@ -28,6 +28,7 @@ class CreateSiswaTable extends Migration
 			$table->string('nama_ibu')->nullable();
 			$table->string('status')->nullable();
 			$table->text('alamat')->nullable();
+			$table->string('tingkat')->nullable();
 			$table->timestamps();
 		});
 	}
