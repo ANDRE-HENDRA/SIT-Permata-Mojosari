@@ -13,10 +13,10 @@ class UpdateSiswaTable extends Migration
      */
     public function up()
     {
-        Schema::table('siswa', function (Blueprint $table) {
-			$table->string('nis')->change();
-			$table->string('tingkat')->nullable();
-        });
+        // Schema::table('siswa', function (Blueprint $table) {
+		// 	$table->string('nis')->change();
+		// 	$table->string('tingkat');
+        // });
     }
 
     /**
