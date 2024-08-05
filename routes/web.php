@@ -56,6 +56,8 @@ Route::middleware('auth')
 				Route::post('/form', 'form')->name('form');
 				Route::post('/store', 'store')->name('store');
 				Route::post('/delete','delete')->name('delete');
+				Route::get('/import-form','importForm')->name('importForm');
+				Route::post('/excel-to-array','excelToArray')->name('excelToArray');
 			});
 
 		Route::controller(TahunAjaranController::class)

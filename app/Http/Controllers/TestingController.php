@@ -111,6 +111,12 @@ class TestingController extends Controller
 		// 	$table->foreignId('kelas_id');
 		// 	$table->timestamps();
 		// });
+		// Schema::create('aktivitas', function (Blueprint $table) {
+		// 	$table->id();
+		// 	$table->foreignId('user_id');
+		// 	$table->foreignId('keterangan');
+		// 	$table->timestamps();
+		// });
 		return 'done';
 	}
 }

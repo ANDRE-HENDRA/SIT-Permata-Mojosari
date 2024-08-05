@@ -12,10 +12,10 @@
 							<i class="fa fa-plus-circle" aria-hidden="true"></i>
 							Tambah
 						</button>
-						<button type="button" class="btn btn-warning text-white btnImport ml-2">
+						<a type="button" href="{{route('siswa.importForm')}}" class="btn btn-warning text-white btnImport ml-2">
 							<i class="fa fa-file-import" aria-hidden="true"></i>
 							Import
-						</button>
+						</a>
 					</div>
 					<!-- /.card-header -->
 					<div class="card-body">
@@ -50,6 +50,8 @@
 	<script>
 		var btnAdd = $('.btnAdd'),
 		btnAddHtml = $(btnAdd).html(),
+		btnImport = $('.btnImport'),
+		btnImportHtml = $(btnImport).html(),
 		modalArea = $('.modalArea'),
 		route = "{{route('siswa.main')}}",
 		routeSiswaForm = "{{route('siswa.form')}}",
@@ -105,6 +107,10 @@
 				swalError()
 				$(btnAdd).html(btnAddHtml);
 			})
+		});
+	
+		$(btnImport).click(function (e) { 
+			$(btnImport).html(spinnerSr);
 		});
 	
 		function edit(id='',ini) {  
