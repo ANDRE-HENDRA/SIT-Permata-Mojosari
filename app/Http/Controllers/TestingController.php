@@ -47,7 +47,7 @@ class TestingController extends Controller
 		// 	$table->string('nama');
 		// 	$table->string('kode');
 		// 	$table->boolean('is_loop');
-		// 	$table->string('loop_bulan');
+		// 	$table->string('loop_bulan')->nullable();
 		// 	$table->boolean('is_wajib');
 		// 	$table->boolean('is_kredit');
 		// 	$table->softDeletes();
@@ -59,8 +59,8 @@ class TestingController extends Controller
 		// 	$table->string('kode');
 		// 	$table->foreignId('jenis_pembayaran_id');
 		// 	$table->integer('nominal');
-		// 	$table->string('is_l',1);
-		// 	$table->string('is_p',1);
+		// 	$table->string('is_l',1)->nullable();
+		// 	$table->string('is_p',1)->nullable();
 		// 	$table->softDeletes();
 		// 	$table->timestamps();
 		// });
@@ -79,25 +79,25 @@ class TestingController extends Controller
 		// 	$table->softDeletes();
 		// 	$table->timestamps();
 		// });
-		Schema::create('transaksi', function (Blueprint $table) {
-			$table->id();
-			$table->string('kode');
-			$table->string('nama_pembayaran');
-			$table->string('jenis_pembayaran');
-			$table->string('kelas');
-			$table->string('tahun_ajaran');
-			$table->foreignId('pembayaran_id');
-			$table->foreignId('kelas_id');
-			$table->foreignId('tahun_ajaran_id');
-			$table->foreignId('jenis_pembayaran_id');
-			$table->foreignId('siswa_id');
-			$table->string('bulan')->nullable();
-			$table->integer('nominal');
-			$table->boolean('is_lunas');
-			$table->date('tanggal_transaksi');
-			$table->softDeletes();
-			$table->timestamps();
-		});
+		// Schema::create('transaksi', function (Blueprint $table) {
+		// 	$table->id();
+		// 	$table->string('kode');
+		// 	$table->string('nama_pembayaran');
+		// 	$table->string('jenis_pembayaran');
+		// 	$table->string('kelas');
+		// 	$table->string('tahun_ajaran');
+		// 	$table->foreignId('pembayaran_id');
+		// 	$table->foreignId('kelas_id');
+		// 	$table->foreignId('tahun_ajaran_id');
+		// 	$table->foreignId('jenis_pembayaran_id');
+		// 	$table->foreignId('siswa_id');
+		// 	$table->string('bulan')->nullable();
+		// 	$table->integer('nominal');
+		// 	$table->boolean('is_lunas');
+		// 	$table->date('tanggal_transaksi');
+		// 	$table->softDeletes();
+		// 	$table->timestamps();
+		// });
 		// Schema::table('siswa', function (Blueprint $table) {
 		// 	$table->string('nis')->change();
 		// 	$table->string('tingkat');

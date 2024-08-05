@@ -24,6 +24,7 @@
 								<tr>
 									<th style="width: 50px;">No</th>
 									<th>Nama Kelas</th>
+									<th>Tingkat</th>
 									<th>Tahun Ajaran</th>
 									<th>Aksi</th>
 								</tr>
@@ -72,6 +73,7 @@
 					return `<p class="m-0 p-1">${data}</p>`
 				}},
 				{data:'nama', name:'nama'},
+				{data:'tingkat', name:'tingkat'},
 				{data:'tahun_ajaran', name:'tahun_ajaran'},
 				{data:'actions', name:'actions'}
 			],

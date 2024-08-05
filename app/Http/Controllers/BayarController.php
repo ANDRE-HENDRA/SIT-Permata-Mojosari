@@ -49,27 +49,29 @@ class BayarController extends Controller
 	}
 	
 	public function tagihanSiswa(Request $request) {
+		if (!$siswa = Siswa::find($request->siswa_id)) {
+			return ['status'=>'fail','message'=>'Data Siswa tidak ditemukan'];
+		}
 		$kelasSiswa = KelasSiswa::with('kelas')->has('kelas')->where('siswa_id',$request->siswa_id)->get()->pluck('kelas_id');
 		$data['pembayaran'] = Pembayaran::with('jenis_pembayaran')
-		->whereHas('jenis_pembayaran',function ($q) use ($request) {
-			$q->where('id',$request->jenis_id);
+		->where('jenis_pembayaran_id',$request->jenis_id)
+		->has('jenis_pembayaran')
+		->has('pembayaran_kelas')
+		->when($siswa->jenis_kelamin=='L',function ($q) {
+			$q->where('is_l','L');
 		})
-		->whereHas('pembayaran_kelas',function ($qq) use ($kelasSiswa) {
-			$qq->whereHas('kelas',function ($qqq) {
-				$qqq->has('tahun_ajaran');
-			})->whereIn('kelas_id',$kelasSiswa);
+		->when($siswa->jenis_kelamin=='P',function ($q) {
+			$q->where('is_p','P');
 		})
-		->with(['pembayaran_kelas'=>function ($qq) {
-			$qq->with(['kelas'=>function ($qqq) {
-				$qqq->with('tahun_ajaran');
-			}]);
+		->with(['pembayaran_kelas'=>function ($qq) use ($kelasSiswa) {
+			$qq->with(['kelas'=>function ($qqq) use ($kelasSiswa) {
+				$qqq->with('tahun_ajaran')
+				->has('tahun_ajaran');
+			}])
+			->has('kelas')
+			->whereIn('kelas_id',$kelasSiswa);
 		}])
 		->first();
-		// $data['pembayaran'] = Pembayaran::with('jenis_pembayaran')
-		// ->whereHas('jenis_pembayaran',function ($q) use ($request) {
-		// 	$q->where('id',$request->jenis_id);
-		// })
-		// ->get();
 		$content = view('pages.bayar.tagihan-list',$data)->render();
 		return ['status'=>'success','response'=>$content];
 	}

@@ -26,7 +26,7 @@
 				</div>
 				<div class="col-12">
 					<div class="form-group">
-						<label for="total_tagihan">Total Tagihan</label>
+						<label for="total_tagihan">Bulan</label>
 						<select class="form-control select2" name="bulan" id="bulan">
 							@foreach ($bulan as $item)
 								<option value="{{$item->m}}">{{$item->bulan}}</option>
@@ -121,6 +121,7 @@
 		$('#reservationdate').datetimepicker({
 			format: 'L'
 		});
+		getTagihan()
 	});
 
 	$('#semua_bulan').change(function (e) { 
@@ -187,8 +188,7 @@
 		});
 	});
 
-	$('#bulan').change(function (e) { 
-		e.preventDefault();
+	function getTagihan() {
 		var data = new FormData()
 		data.append('id_pembayaran',$('#id_pembayaran').val())
 		data.append('siswa_id',$('#siswa_id').val())
@@ -213,6 +213,11 @@
 		.fail((err)=>{
 			swalError()
 		});
+	}
+
+	$('#bulan').change(function (e) { 
+		e.preventDefault();
+		getTagihan()
 	});
 
 </script>

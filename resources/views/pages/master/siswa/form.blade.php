@@ -39,6 +39,17 @@
 						<label for="tahun_masuk" class="form-label">Tahun Masuk</label>
 						<input type="text" name="tahun_masuk" class="form-control filter-table tanggal text-center" id="tahun_masuk" required readonly>
 					</div>
+					<div class="mb-3">
+						<div class="form-group">
+							<label>Tingkat Sekolah</label>
+							<select class="form-control" name="tingkat" id="tingkat">
+								<option value="">- Pilih -</option>
+								<option value="kb" @isset($siswa) @if($siswa->tingkat=='kb') selected @endif @endisset>KB</option>
+								<option value="tk" @isset($siswa) @if($siswa->tingkat=='tk') selected @endif @endisset>TK</option>
+								<option value="sd" @isset($siswa) @if($siswa->tingkat=='sd') selected @endif @endisset>SD</option>
+							</select>
+						</div>
+					</div>
 					<button type="submit" class="btn btn-info btnSimpan" name="addsiswa">Submit</button>
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</form>

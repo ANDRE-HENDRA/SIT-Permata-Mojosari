@@ -72,12 +72,14 @@ class SiswaController extends Controller
 			'nama' => 'required',
 			'jenis_kelamin' => 'required',
 			'tahun_masuk' => 'required',
+			'tingkat' => 'required',
 		];
 		$messages = [
 			'nis.required' => 'NIS Harus Diisi',
 			'nama.required' => 'Nama Harus Diisi',
 			'jenis_kelamin.required' => 'Jenis Kelamin Harus Diisi',
 			'tahun_masuk.required' => 'Tahun Masuk Harus Diisi',
+			'tingkat.required' => 'Tingkat Harus Diisi',
 		];
 
 		$validator = Validator::make($request->all(),$params,$messages);
@@ -113,6 +115,7 @@ class SiswaController extends Controller
 		$siswa->nisn = $request->nisn;
 		$siswa->jenis_kelamin = substr($request->jenis_kelamin,0,1);
 		$siswa->tahun_masuk = $request->tahun_masuk;
+		$siswa->tingkat = $request->tingkat;
 		if (!$siswa->save()) {
 			return ['status'=>'error','message'=>'Gagal menyimpan data, coba lagi atau hubungi admin!'];
 		}

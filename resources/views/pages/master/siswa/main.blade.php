@@ -25,6 +25,7 @@
 									<th style="width: 50px;">No</th>
 									<th>NIS/NISN</th>
 									<th>Nama</th>
+									<th>Tingkat</th>
 									<th>Jenis Kelamin</th>
 									<th>Tahun Masuk</th>
 									<th>Aksi</th>
@@ -79,6 +80,7 @@
 					}},
 					{data:'nis_nisn', name:'nis_nisn'},
 					{data:'nama', name:'nama'},
+					{data:'tingkat', name:'tingkat'},
 					{data:'jenis_kelamin', name:'jenis_kelamin'},
 					{data:'tahun_masuk', name:'tahun_masuk'},
 					{data:'actions', name:'actions'}

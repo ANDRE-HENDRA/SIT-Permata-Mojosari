@@ -17,6 +17,7 @@ class CreateKelasTable extends Migration
             $table->id();
             $table->string('nama');
             $table->integer('tahun_ajaran_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

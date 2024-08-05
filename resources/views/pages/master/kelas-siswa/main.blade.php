@@ -12,10 +12,10 @@
 				<div class="card">
 					<div class="card-header">
 						<!-- Button to Open the Modal -->
-						<button type="button" class="btn btn-primary btnAdd">
+						{{-- <button type="button" class="btn btn-primary btnAdd">
 							<i class="fa fa-plus-circle" aria-hidden="true"></i>
 							Tambah
-						</button>
+						</button> --}}
 					</div>
 					<!-- /.card-header -->
 					<div class="card-body">
