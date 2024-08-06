@@ -219,7 +219,7 @@ class SiswaController extends Controller
 					if ($k==4) {
 						break;
 					}
-					if ($v=='') {
+					if ($v==''&&$k!=1) {
 						$stop = true;
 					}
 					if ($k==3&&!in_array(substr($v,0,1),['L','P'])) {
