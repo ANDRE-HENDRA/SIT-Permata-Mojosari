@@ -222,7 +222,7 @@ class SiswaController extends Controller
 					if ($v==''&&$k!=1) {
 						$stop = true;
 					}
-					if ($k==3&&!in_array(substr($v,0,1),['L','P'])) {
+					if ($k==3&&!in_array(substr(strtoupper($v),0,1),['L','P'])) {
 						$stop = true;
 					}
 				}
@@ -233,7 +233,7 @@ class SiswaController extends Controller
 				$siswa->nama = $value[2];
 				$siswa->nis = $value[0];
 				$siswa->nisn = $value[1];
-				$siswa->jenis_kelamin = substr($value[3],0,1);
+				$siswa->jenis_kelamin = substr(strtoupper($value[3]),0,1);
 				$siswa->tahun_masuk = $request->tahun_masuk;
 				$siswa->tingkat = $request->tingkat;
 				if (!$siswa->save()) {
