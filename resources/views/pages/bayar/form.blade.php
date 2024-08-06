@@ -24,6 +24,7 @@
 						<input type="text" class="form-control form-control-border" id="total_tagihan" readonly @isset($pembayaran_kelas->pembayaran) value="{!! Help::currencyFormatDecimal($pembayaran_kelas->pembayaran->nominal) !!}" @endisset>
 					</div>
 				</div>
+				@if ($pembayaran_kelas->pembayaran->is_loop)
 				<div class="col-12">
 					<div class="form-group">
 						<label for="total_tagihan">Bulan</label>
@@ -34,6 +35,7 @@
 						</select>
 					</div>
 				</div>
+				@endif
 				<div class="col-12">
 					<div class="form-group">
 						<label for="terbayar">Terbayar</label>
