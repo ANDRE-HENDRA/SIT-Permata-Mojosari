@@ -93,7 +93,8 @@ class SiswaController extends Controller
 			return ['status' => 'fail', 'message' => $msg];
 		}
 		$siswa = Siswa::where([
-				'nis'=>$request->nis
+				'nis'=>$request->nis,
+				'tingkat'=>$request->tingkat
 			])
 			->when(!empty($request->id),function ($q) use ($request) {
 				$q->where('id','!=',$request->id);
@@ -208,7 +209,8 @@ class SiswaController extends Controller
 			$total = 0;
 			foreach ($array[0] as $key => $value) {
 				$siswa = Siswa::where([
-						'nis'=>$value[0]
+						'nis'=>$value[0],
+						'tingkat'=>$request->tingkat
 					])
 					->first();
 				if ($siswa) {
