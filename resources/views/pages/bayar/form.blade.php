@@ -24,9 +24,10 @@
 						<input type="text" class="form-control form-control-border" id="total_tagihan" readonly @isset($pembayaran_kelas->pembayaran) value="{!! Help::currencyFormatDecimal($pembayaran_kelas->pembayaran->nominal) !!}" @endisset>
 					</div>
 				</div>
+				@if ($pembayaran_kelas->pembayaran->is_loop)
 				<div class="col-12">
 					<div class="form-group">
-						<label for="total_tagihan">Total Tagihan</label>
+						<label for="total_tagihan">Bulan</label>
 						<select class="form-control select2" name="bulan" id="bulan">
 							@foreach ($bulan as $item)
 								<option value="{{$item->m}}">{{$item->bulan}}</option>
@@ -34,6 +35,7 @@
 						</select>
 					</div>
 				</div>
+				@endif
 				<div class="col-12">
 					<div class="form-group">
 						<label for="terbayar">Terbayar</label>
@@ -121,6 +123,7 @@
 		$('#reservationdate').datetimepicker({
 			format: 'L'
 		});
+		getTagihan()
 	});
 
 	$('#semua_bulan').change(function (e) { 
@@ -187,8 +190,7 @@
 		});
 	});
 
-	$('#bulan').change(function (e) { 
-		e.preventDefault();
+	function getTagihan() {
 		var data = new FormData()
 		data.append('id_pembayaran',$('#id_pembayaran').val())
 		data.append('siswa_id',$('#siswa_id').val())
@@ -213,6 +215,11 @@
 		.fail((err)=>{
 			swalError()
 		});
+	}
+
+	$('#bulan').change(function (e) { 
+		e.preventDefault();
+		getTagihan()
 	});
 
 </script>

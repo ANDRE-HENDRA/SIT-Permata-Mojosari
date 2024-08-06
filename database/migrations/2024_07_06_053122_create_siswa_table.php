@@ -29,6 +29,7 @@ class CreateSiswaTable extends Migration
 			$table->string('status')->nullable();
 			$table->text('alamat')->nullable();
 			$table->string('tingkat')->nullable();
+			$table->softDeletes();
 			$table->timestamps();
 		});
 	}

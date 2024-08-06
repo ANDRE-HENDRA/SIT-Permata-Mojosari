@@ -62,10 +62,12 @@ class KelasController extends Controller
 		$params = [
 			'nama' => 'required',
 			'tahun_ajaran_id' => 'required',
+			'tingkat' => 'required',
 		];
 		$messages = [
 			'nama.required' => 'Nama Harus Diisi',
 			'tahun_ajaran_id.required' => 'Tahun Ajaran Harus Diisi',
+			'tingkat.required' => 'Tingkat Harus Diisi',
 		];
 
 		$validator = Validator::make($request->all(),$params,$messages);
@@ -85,6 +87,7 @@ class KelasController extends Controller
 		}
 		$kelas->nama = $request->nama;
 		$kelas->tahun_ajaran_id = $request->tahun_ajaran_id;
+		$kelas->tingkat = $request->tingkat;
 		if (!$kelas->save()) {
 			return ['status'=>'error','message'=>'Gagal menyimpan data, coba lagi atau hubungi admin!'];
 		}

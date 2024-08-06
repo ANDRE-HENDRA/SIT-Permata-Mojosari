@@ -17,6 +17,7 @@ class CreateTahunAjaranTable extends Migration
             $table->id();
             $table->string('tahun_awal',4);
             $table->string('tahun_akhir',4);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

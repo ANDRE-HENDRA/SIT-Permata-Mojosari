@@ -15,7 +15,7 @@
 					<input type="hidden" name="kelas_id" @isset($kelas) value="{{$kelas->id}}" @endisset>
 					<div class="mb-3">
 						<label for="nama" class="form-label">Nama Kelas</label>
-						<input type="text" name="nama" class="form-control" id="nama" placeholder="Masukan Nama" required @isset($kelas) value="{{$kelas->nama}}" @endisset>
+						<input type="text" name="nama" class="form-control" id="nama" placeholder="Masukan Nama" readonly @isset($kelas) value="{{$kelas->nama}}" @endisset>
 					</div>
 					<div class="mb-3">
 						<div class="form-group">
@@ -59,7 +59,11 @@
 	// btnPlusHtml = $(btnPlus).html(),
 	routeStore = "{{route('kelasSiswa.store')}}",
 	routeGetSiswa = "{{route('kelasSiswa.getSiswa')}}",
-	kelasSiswa = JSON.parse(`{!! json_encode($kelas->kelas_siswa) !!}`)
+	kelasSiswa = JSON.parse(`{!! json_encode($kelas->kelas_siswa) !!}`),
+	tingkat = ''
+	@isset($kelas)
+	tingkat = "{{$kelas->tingkat}}"
+	@endisset
 	$(function () {
 		modal.modal({
 			backdrop: 'static',
@@ -74,7 +78,8 @@
 				delay: 250,
 				data: function(params) {
 					var query = {
-						q: params.term
+						q: params.term,
+						tingkat: tingkat
 					}
 					return query;
 				},

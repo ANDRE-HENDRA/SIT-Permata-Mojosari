@@ -46,8 +46,8 @@
 						<div class="col-12 mb-3">
 							<label>Dibayarkan</label>
 							<select name="is_loop" id="is_loop" class="form-control">
-								<option value="true" @isset($jenisPembayaran) @if ($jenisPembayaran->is_loop) seleced @endif @endisset>Periode (Per-Bulan / Per-Semester / Per-Tahun)</option>
-								<option value="false" @isset($jenisPembayaran) @if (!$jenisPembayaran->is_loop) seleced @endif @endisset>Sekali Selama Sekolah</option>
+								<option value="1" @isset($jenisPembayaran) @if ($jenisPembayaran->is_loop) seleced @endif @endisset>Periode (Per-Bulan / Per-Semester / Per-Tahun)</option>
+								<option value="0" @isset($jenisPembayaran) @if (!$jenisPembayaran->is_loop) seleced @endif @endisset>Sekali Selama Sekolah</option>
 							</select>
 						</div>
 						<div class="col-12 mb-3" id="periode-form">
@@ -183,7 +183,7 @@
 		})
 		.fail((err)=>{
 			$(btnSimpan).html(btnSimpanHtml);
-			swalError(err.response.message)
+			swalError()
 		});
 	});
 

@@ -17,64 +17,71 @@ use Illuminate\Support\Facades\Log;
 class BayarController extends Controller
 {
 	protected $data;
-	
-	public function __construct() {
+
+	public function __construct()
+	{
 		$this->data['title'] = "Pembayaran";
 	}
-	
-	public function main() {
+
+	public function main()
+	{
 		$data = $this->data;
 		$data['menuActive'] = 'Pembayaran';
-		return view('pages.bayar.main',$data);
+		return view('pages.bayar.main', $data);
 	}
-	
-	public function jenisPembayaran(Request $request) {
-		$kelasSiswa = KelasSiswa::with('kelas')->has('kelas')->where('siswa_id',$request->siswa_id)->get()->pluck('kelas_id');
-		$data['jenisPembayaran'] = JenisPembayaran::with(['pembayaran'=>function ($q) {
-				$q->with(['pembayaran_kelas'=>function ($qq) {
-					$qq->with(['kelas'=>function ($qqq) {
-						$qqq->with('tahun_ajaran');
-					}]);
+
+	public function jenisPembayaran(Request $request)
+	{
+		$kelasSiswa = KelasSiswa::with('kelas')->has('kelas')->where('siswa_id', $request->siswa_id)->get()->pluck('kelas_id');
+		$data['jenisPembayaran'] = JenisPembayaran::with(['pembayaran' => function ($q) {
+			$q->with(['pembayaran_kelas' => function ($qq) {
+				$qq->with(['kelas' => function ($qqq) {
+					$qqq->with('tahun_ajaran');
 				}]);
-			}])
-			->whereHas('pembayaran',function ($q) use ($kelasSiswa) {
-				$q->whereHas('pembayaran_kelas',function ($qq) use ($kelasSiswa) {
-					$qq->whereHas('kelas',function ($qqq) {
-						$qqq->has('tahun_ajaran');
-					})->whereIn('kelas_id',$kelasSiswa);
-				});
-			})->get();
-		$content = view('pages.bayar.jenis-pembayaran-list',$data)->render();
-		return ['status'=>'success','response'=>$content];
-	}
-	
-	public function tagihanSiswa(Request $request) {
-		$kelasSiswa = KelasSiswa::with('kelas')->has('kelas')->where('siswa_id',$request->siswa_id)->get()->pluck('kelas_id');
-		$data['pembayaran'] = Pembayaran::with('jenis_pembayaran')
-		->whereHas('jenis_pembayaran',function ($q) use ($request) {
-			$q->where('id',$request->jenis_id);
-		})
-		->whereHas('pembayaran_kelas',function ($qq) use ($kelasSiswa) {
-			$qq->whereHas('kelas',function ($qqq) {
-				$qqq->has('tahun_ajaran');
-			})->whereIn('kelas_id',$kelasSiswa);
-		})
-		->with(['pembayaran_kelas'=>function ($qq) {
-			$qq->with(['kelas'=>function ($qqq) {
-				$qqq->with('tahun_ajaran');
 			}]);
 		}])
-		->first();
-		// $data['pembayaran'] = Pembayaran::with('jenis_pembayaran')
-		// ->whereHas('jenis_pembayaran',function ($q) use ($request) {
-		// 	$q->where('id',$request->jenis_id);
-		// })
-		// ->get();
-		$content = view('pages.bayar.tagihan-list',$data)->render();
-		return ['status'=>'success','response'=>$content];
+			->whereHas('pembayaran', function ($q) use ($kelasSiswa) {
+				$q->whereHas('pembayaran_kelas', function ($qq) use ($kelasSiswa) {
+					$qq->whereHas('kelas', function ($qqq) {
+						$qqq->has('tahun_ajaran');
+					})->whereIn('kelas_id', $kelasSiswa);
+				});
+			})->get();
+		$content = view('pages.bayar.jenis-pembayaran-list', $data)->render();
+		return ['status' => 'success', 'response' => $content];
 	}
-	
-	public function form(Request $request) {
+
+	public function tagihanSiswa(Request $request)
+	{
+		if (!$siswa = Siswa::find($request->siswa_id)) {
+			return ['status' => 'fail', 'message' => 'Data Siswa tidak ditemukan'];
+		}
+		$kelasSiswa = KelasSiswa::with('kelas')->has('kelas')->where('siswa_id', $request->siswa_id)->get()->pluck('kelas_id');
+		$data['pembayaran'] = Pembayaran::with('jenis_pembayaran')
+			->where('jenis_pembayaran_id', $request->jenis_id)
+			->has('jenis_pembayaran')
+			->has('pembayaran_kelas')
+			->when($siswa->jenis_kelamin == 'L', function ($q) {
+				$q->where('is_l', 'L');
+			})
+			->when($siswa->jenis_kelamin == 'P', function ($q) {
+				$q->where('is_p', 'P');
+			})
+			->with(['pembayaran_kelas' => function ($qq) use ($kelasSiswa) {
+				$qq->with(['kelas' => function ($qqq) use ($kelasSiswa) {
+					$qqq->with('tahun_ajaran')
+						->has('tahun_ajaran');
+				}])
+					->has('kelas')
+					->whereIn('kelas_id', $kelasSiswa);
+			}])
+			->first();
+		$content = view('pages.bayar.tagihan-list', $data)->render();
+		return ['status' => 'success', 'response' => $content];
+	}
+
+	public function form(Request $request)
+	{
 		$data = $this->data;
 		// if (!empty($request->id)) {
 		// 	$data['bayar'] = Transaksi::has('pembayaran')
@@ -85,18 +92,17 @@ class BayarController extends Controller
 		// 	}
 		// }
 		if (!$data['siswa'] = Siswa::find($request->siswa_id)) {
-			return ['status'=>'fail','message'=>'Data Siswa tidak ditemukan'];
+			return ['status' => 'fail', 'message' => 'Data Siswa tidak ditemukan'];
 		}
 		// $data['kelas_siswa'] = KelasSiswa::with('kelas')->has('kelas')->where('siswa_id',$request->siswa_id)->get();
 		// $kelasSiswa = $data['kelas_siswa']->pluck('kelas_id');
-		$data['pembayaran_kelas'] = PembayaranKelas::
-			with(['kelas'=>function ($q) {
-				$q->with('tahun_ajaran')->has('tahun_ajaran');
-			}])
-			->with(['pembayaran'=>function ($q) {
+		$data['pembayaran_kelas'] = PembayaranKelas::with(['kelas' => function ($q) {
+			$q->with('tahun_ajaran')->has('tahun_ajaran');
+		}])
+			->with(['pembayaran' => function ($q) {
 				$q->with('jenis_pembayaran');
 			}])
-			->whereHas('pembayaran',function ($q) {
+			->whereHas('pembayaran', function ($q) {
 				$q->has('jenis_pembayaran');
 			})
 			->has('kelas')->find($request->id);
@@ -113,39 +119,42 @@ class BayarController extends Controller
 		// 	->where('id',$request->id_pembayaran)
 		// 	->first();
 		if (!$data['pembayaran_kelas']) {
-			return ['status'=>'fail','message'=>'Siswa tidak memiliki tagihan di pembayaran tersebut'];
+			return ['status' => 'fail', 'message' => 'Siswa tidak memiliki tagihan di pembayaran tersebut'];
 		}
 		$data['bulan'] = [];
-		foreach (explode(',',$data['pembayaran_kelas']->pembayaran->jenis_pembayaran->loop_bulan) as $key => $value) {
+		foreach (explode(',', $data['pembayaran_kelas']->pembayaran->jenis_pembayaran->loop_bulan) as $key => $value) {
 			if (Help::bulanIndo($value)) {
-				$data['bulan'][] = (object)['m'=>$value,'bulan'=>Help::bulanIndo($value)];
+				$data['bulan'][] = (object)['m' => $value, 'bulan' => Help::bulanIndo($value)];
 			}
 		}
-		$data['transaksi'] = Transaksi::where(['pembayaran_id'=>$data['pembayaran_kelas']->pembayaran_id,'siswa_id'=>$request->siswa_id])->get();
-		$content = view('pages.bayar.form',$data)->render();
-		return ['status'=>'success','response'=>$content];
+		$data['transaksi'] = Transaksi::where(['pembayaran_id' => $data['pembayaran_kelas']->pembayaran_id, 'siswa_id' => $request->siswa_id])->get();
+		$content = view('pages.bayar.form', $data)->render();
+		return ['status' => 'success', 'response' => $content];
 	}
-	
-	public function cari_siswa(Request $request) {
+
+	public function cari_siswa(Request $request)
+	{
 		$text_search = $request->q ?? '';
 		$data =  Siswa::where('nis', 'like', "%$text_search%")->orWhere('nama',  'like', "%$text_search%")
-		->get();
+			->get();
 		return response()->json($data, 200);
 	}
 
-	public function getSiswa(Request $request) {
-		$curTahunAjaran = in_array(date('m'),[1,2,3,4,5,6])?date('Y',strtotime(' +1 year')):date('Y');
-		$siswa = Siswa::with(['kelas_siswa'=>function ($q) use ($curTahunAjaran){
-			$q->with('kelas')->whereHas('kelas',function ($qq) use ($curTahunAjaran) {
-				$qq->whereHas('tahun_ajaran',function ($qqq) use ($curTahunAjaran) {
-					$qqq->where('tahun_awal',$curTahunAjaran);
+	public function getSiswa(Request $request)
+	{
+		$curTahunAjaran = in_array(date('m'), [1, 2, 3, 4, 5, 6]) ? date('Y', strtotime(' +1 year')) : date('Y');
+		$siswa = Siswa::with(['kelas_siswa' => function ($q) use ($curTahunAjaran) {
+			$q->with('kelas')->whereHas('kelas', function ($qq) use ($curTahunAjaran) {
+				$qq->whereHas('tahun_ajaran', function ($qqq) use ($curTahunAjaran) {
+					$qqq->where('tahun_awal', $curTahunAjaran);
 				});
 			});
 		}])->find($request->siswa_id);
-		return ['status'=>'success','data'=>$siswa];
+		return ['status' => 'success', 'data' => $siswa];
 	}
 
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 		$params = [
 			'id_pembayaran' => 'required',
 			'siswa_id' => 'required',
@@ -161,7 +170,7 @@ class BayarController extends Controller
 			'nominal.required' => 'Nominal Transaksi Harus Diisi',
 		];
 
-		$validator = Validator::make($request->all(),$params,$messages);
+		$validator = Validator::make($request->all(), $params, $messages);
 		if ($validator->fails()) {
 			foreach ($validator->errors()->toArray() as $key => $val) {
 				$msg = $val[0]; # Get validation messages, only one
@@ -173,23 +182,25 @@ class BayarController extends Controller
 		try {
 			if (!$pembayaran = Pembayaran::with('jenis_pembayaran')->has('jenis_pembayaran')->find($request->id_pembayaran)) {
 				DB::rollBack();
-				return ['status'=>'fail','message'=>'Data pembayaran tidak ditemukan'];
+				return ['status' => 'fail', 'message' => 'Data pembayaran tidak ditemukan'];
 			}
 			if (!$kelas = Kelas::with('tahun_ajaran')->has('tahun_ajaran')->find($request->kelas_id)) {
 				DB::rollBack();
-				return ['status'=>'fail','message'=>'Kelas yang dipilih tidak terdaftar dalam sistem'];
+				return ['status' => 'fail', 'message' => 'Kelas yang dipilih tidak terdaftar dalam sistem'];
 			}
-			if ($transaksi = Transaksi::
-					where(['pembayaran_id'=>$request->id_pembayaran,'siswa_id'=>$request->siswa_id])->
-					when($pembayaran->jenis_pembayaran->is_kredit,function ($q) {
-						$q->where('is_lunas',true);
-					})->
-					when(!$pembayaran->jenis_pembayaran->is_kredit,function ($q) use ($request) {
-						$q->where('bulan',$request->bulan);
-					})
-					->first()) {
+			if ($transaksi = Transaksi::where(['pembayaran_id' => $request->id_pembayaran, 'siswa_id' => $request->siswa_id])->when($pembayaran->jenis_pembayaran->is_kredit, function ($q) {
+				$q->where('is_lunas', true);
+			})->when(!$pembayaran->jenis_pembayaran->is_kredit, function ($q) use ($request) {
+				$q->where('bulan', $request->bulan);
+			})
+				->first()
+			) {
 				DB::rollBack();
-				return ['status'=>'fail','message'=>'Siswa telah melunasi tagihan ini!'];
+				return ['status' => 'fail', 'message' => 'Siswa telah melunasi tagihan ini!'];
+			}
+			$totalTerbayar = 0;
+			if ($pembayaran->jenis_pembayaran->is_kredit) {
+				$totalTerbayar += Transaksi::where(['pembayaran_id' => $pembayaran->id, 'siswa_id' => $request->siswa_id])->sum('nominal');
 			}
 			$transaksi = new Transaksi;
 			$transaksi->pembayaran_id = $pembayaran->id;
@@ -198,61 +209,69 @@ class BayarController extends Controller
 			$transaksi->kelas_id = $request->kelas_id;
 			$transaksi->kelas = $kelas->nama;
 			$transaksi->tahun_ajaran_id = $kelas->tahun_ajaran->id;
-			$transaksi->tahun_ajaran = $kelas->tahun_ajaran->tahun_awal.'/'.$kelas->tahun_ajaran->tahun_akhir;
+			$transaksi->tahun_ajaran = $kelas->tahun_ajaran->tahun_awal . '/' . $kelas->tahun_ajaran->tahun_akhir;
 			$transaksi->jenis_pembayaran_id = $pembayaran->jenis_pembayaran->id;
 			$transaksi->jenis_pembayaran = $pembayaran->jenis_pembayaran->nama;
 			$transaksi->bulan = $request->bulan;
-			$transaksi->nominal = abs((int) filter_var(str_replace(array('+','-'), '', $request->nominal), FILTER_SANITIZE_NUMBER_INT));
-			$transaksi->is_lunas = true;
-			$transaksi->tanggal_transaksi = date('Y-m-d',strtotime($request->tanggal_transaksi));
+			$transaksi->nominal = abs((int) filter_var(str_replace(array('+', '-'), '', $request->nominal), FILTER_SANITIZE_NUMBER_INT));
+			if ($transaksi->nominal > ($pembayaran->nominal - $totalTerbayar)) {
+				DB::rollBack();
+				return ['status' => 'fail', 'message' => 'Nominal melebihi sisa tagihan ini!'];
+			} else if ($transaksi->nominal == ($pembayaran->nominal - $totalTerbayar)) {
+				$transaksi->is_lunas = true;
+			} else {
+				$transaksi->is_lunas = false;
+			}
+			$transaksi->tanggal_transaksi = date('Y-m-d', strtotime($request->tanggal_transaksi));
 			$transaksi->kode = '-';
 			if (!$transaksi->save()) {
 				DB::rollBack();
-				return ['status'=>'error','message'=>'Gagal menyimpan data, coba lagi atau hubungi admin! [errCode:02]'];
+				return ['status' => 'error', 'message' => 'Gagal menyimpan data, coba lagi atau hubungi admin! [errCode:02]'];
 			}
-			$transaksi->kode = $pembayaran->kode.'.'.$transaksi->id;
+			$transaksi->kode = $pembayaran->kode . '.' . $transaksi->id;
 			if (!$transaksi->save()) {
 				DB::rollBack();
-				return ['status'=>'error','message'=>'Gagal menyimpan data, coba lagi atau hubungi admin! [errCode:02]'];
+				return ['status' => 'error', 'message' => 'Gagal menyimpan data, coba lagi atau hubungi admin! [errCode:02]'];
 			}
 			DB::commit();
-			return ['status'=>'success','message'=>'Berhasil menyimpan data!','data'=>$transaksi];
+			return ['status' => 'success', 'message' => 'Berhasil menyimpan data!', 'data' => $transaksi];
 		} catch (\Throwable $th) {
 			Log::info($th->getMessage());
 			DB::rollBack();
 			throw $th;
-			return ['status'=>'error','message'=>'Terjadi Kesalahan Sistem!'];
+			return ['status' => 'error', 'message' => 'Terjadi Kesalahan Sistem!'];
 		}
 	}
 
-	public function invoice($id=1) {
+	public function invoice($id = 1)
+	{
 		$data['transaksi'] = Transaksi::with('siswa')
-			->with(['pembayaran'=>function ($q) {
+			->with(['pembayaran' => function ($q) {
 				$q->with('detail_pembayaran');
 			}])
 			->find($id);
-		return view('pages.bayar.invoice',$data);
+		return view('pages.bayar.invoice', $data);
 	}
 
-	public function getTagihan(Request $request) {
+	public function getTagihan(Request $request)
+	{
 		$data['pembayaran'] = Pembayaran::has('jenis_pembayaran')->with('jenis_pembayaran')->find($request->id_pembayaran);
-		$data['transaksi'] = Transaksi::where(['pembayaran_id'=>$request->id_pembayaran,'siswa_id'=>$request->siswa_id])->get();
+		$data['transaksi'] = Transaksi::where(['pembayaran_id' => $request->id_pembayaran, 'siswa_id' => $request->siswa_id])->get();
 		if (count($data['transaksi'])) {
 			if ($data['pembayaran']->jenis_pembayaran->is_kredit) {
-				$data['is_lunas'] = Transaksi::where(['pembayaran_id'=>$request->id_pembayaran,'siswa_id'=>$request->siswa_id,'is_lunas'=>true])->first()?true:false;
+				$data['is_lunas'] = Transaksi::where(['pembayaran_id' => $request->id_pembayaran, 'siswa_id' => $request->siswa_id, 'is_lunas' => true])->first() ? true : false;
 				$data['sisa'] = $data['pembayaran']->nominal - $data['transaksi']->sum('nominal');
 				$data['terbayar'] = $data['transaksi']->sum('nominal');
 			} else {
-				$data['is_lunas'] = Transaksi::where(['pembayaran_id'=>$request->id_pembayaran,'siswa_id'=>$request->siswa_id,'bulan'=>$request->bulan])->first()?true:false;
-				$data['sisa'] = $data['is_lunas']?0:$data['pembayaran']->nominal;
-				$data['terbayar'] = $data['is_lunas']?$data['pembayaran']->nominal:0;
+				$data['is_lunas'] = Transaksi::where(['pembayaran_id' => $request->id_pembayaran, 'siswa_id' => $request->siswa_id, 'bulan' => $request->bulan])->first() ? true : false;
+				$data['sisa'] = $data['is_lunas'] ? 0 : $data['pembayaran']->nominal;
+				$data['terbayar'] = $data['is_lunas'] ? $data['pembayaran']->nominal : 0;
 			}
-			
 		} else {
 			$data['sisa'] = $data['pembayaran']->nominal;
 			$data['terbayar'] = 0;
 			$data['is_lunas'] = false;
 		}
-		return ['status'=>'success','data'=>$data];
+		return ['status' => 'success', 'data' => $data];
 	}
 }

@@ -13,7 +13,7 @@
 	<style>
 		body{
 			background:#eee;
-			margin-top:20px;
+			/* margin-top:20px; */
 		}
 		.text-danger strong {
 			color: #9f181c;
@@ -22,9 +22,9 @@
 			background: #ffffff none repeat scroll 0 0;
 			border-bottom: 12px solid #333333;
 			border-top: 12px solid #9f181c;
-			margin-top: 50px;
-			margin-bottom: 50px;
-			padding: 40px 30px !important;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			padding: 4px 3px !important;
 			position: relative;
 			box-shadow: 0 1px 21px #acacac;
 			color: #333333;
@@ -69,7 +69,7 @@
 			width: 18px;
 		}
 		.receipt-main td {
-			padding: 9px 20px !important;
+			padding: 1px 2px !important;
 		}
 		.receipt-main th {
 			padding: 13px 20px !important;
@@ -90,22 +90,37 @@
 		}
 		.receipt-header-mid .receipt-left h1 {
 			font-weight: 100;
-			margin: 34px 0 0;
+			margin: 8px 0 0;
 			text-align: right;
 			text-transform: uppercase;
 		}
 		.receipt-header-mid {
-			margin: 24px 0;
+			margin: 6px 0;
 			overflow: hidden;
 		}
 		
 		#container {
 			background-color: #dcdcdc;
 		}
+
+		hr {
+			border: none;
+			border-top: 1px dotted #f00;
+			color: #fff;
+			background-color: #fff;
+			height: 1px;
+			margin: 0;
+			padding: 0;
+		}
+
+		.bg-lunas {
+			background-image: url("{{asset('img/lunas.png')}}");
+		}
 	</style>
 </head>
 <body>
-	<div class="col-md-12">   
+	<div class="col-md-12">
+		@foreach ([1,2] as $printLoop)
 		<div class="row">
 			
 			<div class="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
@@ -120,8 +135,8 @@
 						<div class="col-xs-6 col-sm-6 col-md-6 text-right">
 							<div class="receipt-right">
 								<h5>SIT Permata Mojosari.</h5>
-								<p>0821-3649-6589 <i class="fa fa-phone"></i></p>
-								<p>sit@gmail.com <i class="fa fa-envelope-o"></i></p>
+								{{-- <p>-<i class="fa fa-phone"></i></p>
+								<p>-<i class="fa fa-envelope-o"></i></p> --}}
 								<p>Mojokerto<i class="fa fa-location-arrow"></i></p>
 							</div>
 						</div>
@@ -149,7 +164,7 @@
 				</div>
 				
 				<div>
-					<table class="table table-bordered">
+					<table class="table">
 						<thead>
 							<tr>
 								<th width="70%">Deskripsi</th>
@@ -174,22 +189,35 @@
 				
 				<div class="row">
 					<div class="receipt-header receipt-header-mid receipt-footer">
-						<div class="col-xs-8 col-sm-8 col-md-8 text-left">
+						<div class="col-xs-6 col-sm-6 col-md-6 text-left">
 							<div class="receipt-right">
 								<p><b>Date :</b>{{$transaksi->tanggal_transaksi}}</p>
 								<h5 style="color: rgb(140, 140, 140);">SIT Permata Meri</h5>
 							</div>
 						</div>
-						<div class="col-xs-4 col-sm-4 col-md-4">
+						<div class="col-xs-2 col-sm-2 col-md-2">
+						@if ($transaksi->is_lunas)
+							<img src="{{asset('img/lunas.png')}}" alt="" style="width:100%;padding-left:-20px">
+						@endif
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2">
 							<div class="receipt-left">
-								<h1>Stamp</h1>
+								{{-- <h1>Stamp</h1> --}}
+								<div style="width: 20%">
+									{!! QrCode::size(82)->generate($transaksi->kode) !!}
+								</div>
+								{{-- <img src="data:image/png;base64, " alt=""> --}}
 							</div>
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2">
 						</div>
 					</div>
 				</div>
 				
 			</div>    
 		</div>
+		<hr>
+		@endforeach
 	</div>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

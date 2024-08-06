@@ -12,10 +12,10 @@
 							<i class="fa fa-plus-circle" aria-hidden="true"></i>
 							Tambah
 						</button>
-						<button type="button" class="btn btn-warning text-white btnImport ml-2">
+						<a type="button" href="{{route('siswa.importForm')}}" class="btn btn-warning text-white btnImport ml-2">
 							<i class="fa fa-file-import" aria-hidden="true"></i>
 							Import
-						</button>
+						</a>
 					</div>
 					<!-- /.card-header -->
 					<div class="card-body">
@@ -25,6 +25,7 @@
 									<th style="width: 50px;">No</th>
 									<th>NIS/NISN</th>
 									<th>Nama</th>
+									<th>Tingkat</th>
 									<th>Jenis Kelamin</th>
 									<th>Tahun Masuk</th>
 									<th>Aksi</th>
@@ -49,6 +50,8 @@
 	<script>
 		var btnAdd = $('.btnAdd'),
 		btnAddHtml = $(btnAdd).html(),
+		btnImport = $('.btnImport'),
+		btnImportHtml = $(btnImport).html(),
 		modalArea = $('.modalArea'),
 		route = "{{route('siswa.main')}}",
 		routeSiswaForm = "{{route('siswa.form')}}",
@@ -79,6 +82,7 @@
 					}},
 					{data:'nis_nisn', name:'nis_nisn'},
 					{data:'nama', name:'nama'},
+					{data:'tingkat', name:'tingkat'},
 					{data:'jenis_kelamin', name:'jenis_kelamin'},
 					{data:'tahun_masuk', name:'tahun_masuk'},
 					{data:'actions', name:'actions'}
@@ -103,6 +107,10 @@
 				swalError()
 				$(btnAdd).html(btnAddHtml);
 			})
+		});
+	
+		$(btnImport).click(function (e) { 
+			$(btnImport).html(spinnerSr);
 		});
 	
 		function edit(id='',ini) {  

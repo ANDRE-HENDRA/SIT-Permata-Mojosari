@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SiswaImport;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
-use Help, Validator, DataTables;
+use Help, Validator, DataTables, Excel, DB;
+use Illuminate\Support\Facades\Log;
 
 class SiswaController extends Controller
 {
@@ -72,12 +74,14 @@ class SiswaController extends Controller
 			'nama' => 'required',
 			'jenis_kelamin' => 'required',
 			'tahun_masuk' => 'required',
+			'tingkat' => 'required',
 		];
 		$messages = [
 			'nis.required' => 'NIS Harus Diisi',
 			'nama.required' => 'Nama Harus Diisi',
 			'jenis_kelamin.required' => 'Jenis Kelamin Harus Diisi',
 			'tahun_masuk.required' => 'Tahun Masuk Harus Diisi',
+			'tingkat.required' => 'Tingkat Harus Diisi',
 		];
 
 		$validator = Validator::make($request->all(),$params,$messages);
@@ -113,6 +117,7 @@ class SiswaController extends Controller
 		$siswa->nisn = $request->nisn;
 		$siswa->jenis_kelamin = substr($request->jenis_kelamin,0,1);
 		$siswa->tahun_masuk = $request->tahun_masuk;
+		$siswa->tingkat = $request->tingkat;
 		if (!$siswa->save()) {
 			return ['status'=>'error','message'=>'Gagal menyimpan data, coba lagi atau hubungi admin!'];
 		}
@@ -169,5 +174,82 @@ class SiswaController extends Controller
 			return ['status'=>'error','message'=>'Gagal merestore data, coba lagi atau hubungi admin!'];
 		}
 		return ['status'=>'success','message'=>'Berhasil merestore data!'];
+	}
+
+	public function importForm() {
+		$data = $this->data;
+		$data['menuActive'] = 'Import Siswa';
+		return view('pages.master.siswa.import',$data);
+	}
+
+	public function excelToArray(Request $request) {
+		$params = [
+			'file' => 'required',
+			'tahun_masuk' => 'required',
+			'tingkat' => 'required',
+		];
+		$messages = [
+			'file.required' => 'File Harus Diisi',
+			'tahun_masuk.required' => 'Tahun Masuk Harus Diisi',
+			'tingkat.required' => 'Tingkat Harus Diisi',
+		];
+
+		$validator = Validator::make($request->all(),$params,$messages);
+		if ($validator->fails()) {
+			foreach ($validator->errors()->toArray() as $key => $val) {
+				$msg = $val[0]; # Get validation messages, only one
+				break;
+			}
+			return ['status' => 'fail', 'message' => $msg];
+		}
+		$array = Excel::toArray(new SiswaImport, $request->file('file'));
+		DB::beginTransaction();
+		try {
+			$total = 0;
+			foreach ($array[0] as $key => $value) {
+				$siswa = Siswa::where([
+						'nis'=>$value[0]
+					])
+					->first();
+				if ($siswa) {
+					continue;
+				}
+				$stop=false;
+				foreach ($value as $k => $v) {
+					if ($k==4) {
+						break;
+					}
+					if ($v=='') {
+						$stop = true;
+					}
+					if ($k==3&&!in_array(substr($v,0,1),['L','P'])) {
+						$stop = true;
+					}
+				}
+				if ($stop) {
+					continue;
+				}
+				$siswa = new Siswa;
+				$siswa->nama = $value[2];
+				$siswa->nis = $value[0];
+				$siswa->nisn = $value[1];
+				$siswa->jenis_kelamin = substr($value[3],0,1);
+				$siswa->tahun_masuk = $request->tahun_masuk;
+				$siswa->tingkat = $request->tingkat;
+				if (!$siswa->save()) {
+					DB::rollBack();
+					return ['status'=>'error','message'=>'Gagal menyimpan data, coba lagi atau hubungi admin!'];
+				}
+				$total+=1;
+			}
+			DB::commit();
+			return ['status'=>'success','message'=>"Berhasil mengupload $total data!"];
+		} catch (\Throwable $th) {
+			Log::info($th->getMessage());
+			DB::rollBack();
+			throw $th;
+			return ['status'=>'error','message'=>'Terjadi Kesalahan Sistem!'];
+		}
+		return $array;
 	}
 }

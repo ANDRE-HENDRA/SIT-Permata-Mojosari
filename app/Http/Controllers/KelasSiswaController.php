@@ -130,7 +130,9 @@ class KelasSiswaController extends Controller
 
 	public function cariSiswa(Request $request) {
 		$text_search = $request->q ?? '';
-		$data =  Siswa::select('id', 'nama')->selectRaw("concat(nis, '/', coalesce(nisn,'-')) as nis_nisn")->where('nis', 'like', "%$text_search%")->orWhere('nama',  'like', "%$text_search%")
+		$data =  Siswa::select('id', 'nama')->selectRaw("concat(nis, '/', coalesce(nisn,'-')) as nis_nisn")->where('tingkat',$request->tingkat)->where(function ($q) use ($text_search) {
+			$q->where('nis', 'like', "%$text_search%")->orWhere('nama',  'like', "%$text_search%");
+		})
 		->get();
 		return response()->json($data, 200);
 	}
