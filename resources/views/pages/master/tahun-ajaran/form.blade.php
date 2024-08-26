@@ -104,7 +104,7 @@
 		})
 		.fail((err)=>{
 			$(btnSimpan).html(btnSimpanHtml);
-			swalError(err.response.message)
+			swalError()
 		});
 	});
 

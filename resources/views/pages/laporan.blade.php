@@ -59,22 +59,25 @@
                                     </div>
                                 </div>
                                 <!-- tabel -->
-                                <div class="card-body">
-                                    <table class="table table-bordered table-hover" id="datatable-harian">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 50px;">No</th>
-                                                <th>NIS/NISN</th>
-                                                <th>Nama</th>
-                                                <th>Kelas</th>
-                                                <th>Tahun Ajaran</th>
-                                                <th>Jenis Pembayaran</th>
-                                                <th>Tanggal</th>
-                                                <th>Nominal</th>
-                                                <th>Keterangan</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <table class="table table-bordered table-hover" id="datatable-harian">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 50px;">No</th>
+                                                    <th>NIS/NISN</th>
+                                                    <th>Nama</th>
+                                                    <th>Kelas</th>
+                                                    <th>Tahun Ajaran</th>
+                                                    <th>Jenis Pembayaran</th>
+                                                    <th>Tanggal</th>
+                                                    <th>Nominal</th>
+                                                    <th>Keterangan</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                                 <!-- /tabel -->
                             </div>
@@ -96,6 +99,7 @@
                                                 <th>Periode<br>(Mingguan)</th>
                                                 <th>Nominal</th>
                                                 <th>Keterangan</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -120,35 +124,10 @@
                                                 <th>Periode<br>(Tahunan)</th>
                                                 <th>Nominal</th>
                                                 <th>Keterangan</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>101100</td>
-                                                <td>Sultan Agung</td>
-                                                <td>TK A1</td>
-                                                <td>2024/2025</td>
-                                                <td>SPP</td>
-                                                <td>Harini</td>
-                                                <td>100.000</td>
-                                                <td>
-                                                    <span class="badge badge-success">Lunas</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>101100</td>
-                                                <td>Airlangga hartarto</td>
-                                                <td>TK A1</td>
-                                                <td>2024/2025</td>
-                                                <td>SPP</td>
-                                                <td>Harini</td>
-                                                <td>100.000</td>
-                                                <td>
-                                                    <span class="badge badge-danger">Belum Lunas</span>
-                                                </td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -175,7 +154,11 @@
     $(async function () {
         await dataTable()
     });
-    $('#jarakTanggal').daterangepicker()
+    $('#jarakTanggal').daterangepicker({
+		locale: {
+			format: 'DD-MM-YYYY'
+		}
+	})
     $('#tahun_ajaran_id').change(function (e) { 
         e.preventDefault();
         $('#kelas_id').html('');
@@ -201,7 +184,7 @@
 	async function dataTable(jarakTanggal=$('#jarakTanggal').val(),tahun_ajaran_id=$('#tahun_ajaran_id').val(),jenis_pembayaran=$('#jenis_pembayaran').val()) {
 		await $('#datatable-harian').DataTable({
 			stateSave: false,
-			scrollX: false,
+			scrollX: true,
 			serverSide: true,
 			processing: true,
 			destroy: true,
@@ -229,7 +212,8 @@
 			{data:'jenis', name:'jenis'},
 			{data:'tanggal_transaksi', name:'tanggal_transaksi'},
 			{data:'nominal', name:'nominal'},
-			{data:'keterangan', name:'keterangan'}
+			{data:'keterangan', name:'keterangan'},
+			{data:'actions', name:'actions'}
 			],
 		})
 	}

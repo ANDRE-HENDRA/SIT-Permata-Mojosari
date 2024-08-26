@@ -10,4 +10,8 @@ class Users extends Authenticatable
 {
     use HasFactory;
     protected $table = 'users';
+
+    public function aktivitas() {
+        return $this->hasMany(Aktivitas::class,'user_id');
+    }
 }

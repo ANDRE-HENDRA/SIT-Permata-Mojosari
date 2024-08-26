@@ -19,8 +19,8 @@ class LaporanController extends Controller
 
 	public function main(Request $request) {
 		if ($request->ajax()) {
-			$tglAwal = date('Y-m-d',strtotime(explode(' - ',$request->jarakTanggal)[0]));
-			$tglAkhir = date('Y-m-d',strtotime(explode(' - ',$request->jarakTanggal)[1]));
+			$tglAwal = date('Y-m-d 00:00:00',strtotime(explode(' - ',$request->jarakTanggal)[0]));
+			$tglAkhir = date('Y-m-d 23:59:59',strtotime(explode(' - ',$request->jarakTanggal)[1]));
 			$data = Transaksi::orderBy('id','asc')
 				->with('siswa')
 				->has('siswa')
@@ -35,7 +35,7 @@ class LaporanController extends Controller
 						}])->has('kelas');
 					}]);
 				}])
-				// ->whereBetween('tanggal_transaksi',[$tglAwal,$tglAkhir])
+				->whereBetween('tanggal_transaksi',[$tglAwal,$tglAkhir])
 				->where('tahun_ajaran_id',$request->tahun_ajaran_id)
 				->when($request->jenis_pembayaran!='semua',function ($q) use ($request) {
 					$q->where('jenis_pembayaran_id',$request->jenis_pembayaran);
@@ -60,14 +60,8 @@ class LaporanController extends Controller
 				})
 				->addColumn('actions',function ($row) {
 					$html = '';
-					$html .= '<button type="button" class="btn btn-success btn-sm" onclick="edit('.$row->id.',this)">
-									<i class="fa fa-pencil-alt" aria-hidden="true"></i>
-									edit
-								</button>';
-					$html .= '<button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapus('.$row->id.',this,`'.$row->nama.'`)">
-									<i class="fa fa-trash" aria-hidden="true"></i>
-									hapus
-								</button>';
+					$routeInvoice = route('bayar.invoice')."/$row->id";
+					$html .= "<a href='$routeInvoice' target='blank'><button class='btn btn-sm btn-warning text-white'><i class='fa fa-print'></i></button></a>";
 					return $html;
 				})
 				->rawColumns(['actions','keterangan'])
@@ -82,6 +76,8 @@ class LaporanController extends Controller
 	}
 
 	function import(Request $request) {
+		$tglAwal = date('Y-m-d 00:00:00',strtotime(explode(' - ',$request->jarakTanggal)[0]));
+		$tglAkhir = date('Y-m-d 23:59:59',strtotime(explode(' - ',$request->jarakTanggal)[1]));
 		$data['transaksi'] = Transaksi::orderBy('id','asc')
 			->with('siswa')
 			->has('siswa')
@@ -96,7 +92,7 @@ class LaporanController extends Controller
 					}])->has('kelas');
 				}]);
 			}])
-			// ->whereBetween('tanggal_transaksi',[$tglAwal,$tglAkhir])
+			->whereBetween('tanggal_transaksi',[$tglAwal,$tglAkhir])
 			->where('tahun_ajaran_id',$request->tahun_ajaran_id)
 			->when($request->jenis_pembayaran!='semua',function ($q) use ($request) {
 				$q->where('jenis_pembayaran_id',$request->jenis_pembayaran);
