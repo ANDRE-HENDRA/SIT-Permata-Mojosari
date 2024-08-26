@@ -167,9 +167,9 @@
 	$(async function () {
 		// await dataTable()
 		// renderJenis()
-		modalPrintAll.modal({
-			backdrop: 'static'
-		})
+		// modalPrintAll.modal({
+		// 	backdrop: 'static'
+		// })
 		$(btnPrintAll).hide();
 		$('#siswa_id').select2({
 			width: "resolve",
