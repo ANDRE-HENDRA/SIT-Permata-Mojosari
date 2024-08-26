@@ -149,7 +149,11 @@ class BayarController extends Controller
 					$qqq->where('tahun_awal', $curTahunAjaran);
 				});
 			});
-		}])->find($request->siswa_id);
+		}])
+		->with('transaksi', function ($q) {
+			$q->orderBy('id','desc');
+		})
+		->find($request->siswa_id);
 		return ['status' => 'success', 'data' => $siswa];
 	}
 
@@ -190,7 +194,7 @@ class BayarController extends Controller
 			}
 			if ($transaksi = Transaksi::where(['pembayaran_id' => $request->id_pembayaran, 'siswa_id' => $request->siswa_id])->when($pembayaran->jenis_pembayaran->is_kredit, function ($q) {
 				$q->where('is_lunas', true);
-			})->when(!$pembayaran->jenis_pembayaran->is_kredit, function ($q) use ($request) {
+			})->when(!$pembayaran->jenis_pembayaran->is_loop, function ($q) use ($request) {
 				$q->where('bulan', $request->bulan);
 			})
 				->first()
@@ -226,12 +230,16 @@ class BayarController extends Controller
 			$transaksi->kode = '-';
 			if (!$transaksi->save()) {
 				DB::rollBack();
-				return ['status' => 'error', 'message' => 'Gagal menyimpan data, coba lagi atau hubungi admin! [errCode:02]'];
+				return ['status' => 'error', 'message' => 'Gagal menyimpan data, coba lagi atau hubungi admin! [errCode:01]'];
 			}
 			$transaksi->kode = $pembayaran->kode . '.' . $transaksi->id;
 			if (!$transaksi->save()) {
 				DB::rollBack();
 				return ['status' => 'error', 'message' => 'Gagal menyimpan data, coba lagi atau hubungi admin! [errCode:02]'];
+			}
+			if (!Help::storeLog("Melakukan bayar kode transaksi [$transaksi->kode] sejumlah $transaksi->nominal")) {
+				DB::rollBack();
+				return ['status' => 'error', 'message' => 'Gagal menyimpan data, coba lagi atau hubungi admin! [errCode:03]'];
 			}
 			DB::commit();
 			return ['status' => 'success', 'message' => 'Berhasil menyimpan data!', 'data' => $transaksi];

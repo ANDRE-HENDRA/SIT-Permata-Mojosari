@@ -254,4 +254,10 @@ class SiswaController extends Controller
 		}
 		return $array;
 	}
+
+	public function downloadTemplate()
+	{
+		$fileMateri = public_path("file/template.xlsx");
+		return response()->download($fileMateri);
+	}
 }

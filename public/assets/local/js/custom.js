@@ -42,7 +42,7 @@ function swalSuccess(params='') {
 	})
 }
 
-function swalError(params='') {  
+function swalError(params='Silahkan hubungi admin!') {  
 	Swal.fire({
 		title: 'Terjadi Kesalahan Sistem!',
 		text: params,

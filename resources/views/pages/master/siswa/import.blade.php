@@ -45,6 +45,9 @@
 											Tabel harus tanpa header
 										</li>
 										<img class="img-fluid" src="{{asset('tutorial/excelguru.PNG')}}" alt="">
+										<li>
+											<a href="{{route('siswa.downloadTemplate')}}" target='_blank' class="alert-link"><strong><u>Download template excel</u></strong></a>
+										</li>
 									</ul>
 								</div>
 							</div>

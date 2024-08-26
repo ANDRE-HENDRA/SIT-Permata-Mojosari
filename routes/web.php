@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\BayarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JenisPembayaranController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\KelasSiswaController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\NaikKelasController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PengaturanAkunController;
 use App\Http\Controllers\ReferenceController;
@@ -58,6 +60,7 @@ Route::middleware('auth')
 				Route::post('/delete','delete')->name('delete');
 				Route::get('/import-form','importForm')->name('importForm');
 				Route::post('/excel-to-array','excelToArray')->name('excelToArray');
+				Route::get('/download-template','downloadTemplate')->name('downloadTemplate');
 			});
 
 		Route::controller(TahunAjaranController::class)
@@ -90,6 +93,15 @@ Route::middleware('auth')
 				Route::post('/form','form')->name('form');
 				Route::post('/store','store')->name('store');
 				Route::post('/cari-siswa','cariSiswa')->name('cariSiswa');
+				Route::post('/get-siswa','getSiswa')->name('getSiswa');
+			});
+
+			Route::controller(NaikKelasController::class)
+			->prefix('naik-kelas')
+			->as('naikKelas.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
+				Route::post('/store','store')->name('store');
 				Route::post('/get-siswa','getSiswa')->name('getSiswa');
 			});
 
@@ -154,6 +166,13 @@ Route::middleware('auth')
 			->group(function () {
 				Route::get('/', 'main')->name('main');
 				Route::get('/import', 'import')->name('import');
+			});
+
+		Route::controller(ActivityLogController::class)
+			->prefix('activity-log')
+			->as('activityLog.')
+			->group(function () {
+				Route::get('/', 'main')->name('main');
 			});
 
 		Route::controller(ReferenceController::class)

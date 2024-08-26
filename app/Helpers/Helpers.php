@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Models\Aktivitas;
+use Auth;
 class Helpers
 {
 	public static function resHttp($data = [])
@@ -78,5 +80,13 @@ class Helpers
 	{
 		$hasil_rupiah = 'Rp. ' . number_format((float) $angka, 0, ',', '.');
 		return $hasil_rupiah;
+	}
+
+	public static function storeLog($keterangan) {
+		$log = new Aktivitas;
+		$log->user_id = Auth::user()->id;
+		$log->nama_user = Auth::user()->name;
+		$log->keterangan = $keterangan;
+		return $log->save();
 	}
 }

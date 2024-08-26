@@ -313,6 +313,14 @@ if (!isset($menuActive)) {
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('naikKelas.main')}}" class="nav-link {{$menuActive=='Naik Kelas'? 'active' :''}}">
+                        <i class="nav-icon fas fa-sort-numeric-up-alt"></i>
+                        <p>
+                            Naik Kelas
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-header">Pengolahan Pembayaran</li>
                 <li class="nav-item">
                     <a href="{{route('jenisPembayaran.main')}}" class="nav-link {{$menuActive=='Jenis Pembayaran'? 'active' :''}}">
@@ -363,6 +371,15 @@ if (!isset($menuActive)) {
                         <i class="nav-icon far fa-folder"></i>
                         <p>
                             Laporan Keuangan
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-header">Other</li>
+                <li class="nav-item">
+                    <a href="{{route('activityLog.main')}}" class="nav-link {{$menuActive=='Activity Log'? 'active' :''}}">
+                        <i class="nav-icon fas fa-history"></i>
+                        <p>
+                            Activity Log
                         </p>
                     </a>
                 </li>

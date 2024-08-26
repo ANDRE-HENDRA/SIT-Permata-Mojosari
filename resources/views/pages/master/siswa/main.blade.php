@@ -1,4 +1,7 @@
 @extends('layout.index')
+@push('style')
+	@include('layout.datatableCSS')
+@endpush
 @section('content')
 <!-- Main content -->
 <section class="content">

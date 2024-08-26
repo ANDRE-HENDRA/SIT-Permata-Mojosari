@@ -75,11 +75,16 @@
 					<div class="col-12">
 						<!-- Profile Image -->
 						<div class="card card-warning card-outline">
-							<div class="card-header">
+							<div class="card-header d-flex">
 								<label>Transaksi Terakhir</label>
+								<button class="btn btn-danger ml-auto mr-0 btn-sm btnPrintAll"><i class="fas fa-print"></i>Bulk Print</button>
 							</div>
 							<div class="card-body box-profile">
-		
+								<table id="tbl-riwayat">
+									<tbody>
+										
+									</tbody>
+								</table>
 							</div>
 							<!-- /.card-body -->
 						</div>
@@ -94,23 +99,78 @@
 		
 	</div><!-- /.container-fluid -->
 </section>
+<div class="modalArea">
+	<div class="modal fade" id="modalPrintAll">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Bulk Print</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				
+				<!-- Modal body -->
+				<div class="modal-body">
+					<form id="formPrintAll">
+						<div class="mb-3">
+							<div class="form-group">
+								<label>Cari Transaksi</label>
+								<select class="form-control select2" 
+									style="width: 100%"
+									onchange="triggerPilihSiswa()"
+									id="transaksi_id" 
+									name="transaksi_id"
+								>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3">
+							{{-- <button class="btn btn-success btnPlus ml-auto">+</button> --}}
+							<div class="spinner-area"></div>
+						</div>
+						<table class="table table-responsive table-borderless" id="table-kelas-siswa">
+							<tbody>
+							</tbody>
+						</table>
+					</form>
+				</div>
+				
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button class="btn btn-info btnSimpan" name="addsiswa">Submit</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection
 @push('script')
 <script>
 	var btnAdd = $('.btnAdd'),
+	btnPrintAll = $('.btnPrintAll'),
 	btnAddHtml = $(btnAdd).html(),
+	btnPrintAllHtml = $(btnPrintAll).html(),
+	modalPrintAll = $('#modalPrintAll'),
 	modalArea = $('.modalArea'),
 	bayarBody = $('#bayar-body'),
 	bayarBodyHtml = $('#bayar-body').html(),
 	btnReload = $('.btnReload'),
+	tabelRiwayat = $('#tbl-riwayat tbody'),
 	route = "{{route('jenisPembayaran.main')}}",
 	routeBayarForm = "{{route('bayar.form')}}",
 	routeJenisPembayaranDelete = "{{route('jenisPembayaran.delete')}}",
 	routeJenisPembayaranList = "{{route('bayar.jenisPembayaran')}}",
-	routeTagihanSiswa = "{{route('bayar.tagihanSiswa')}}"
+	routeTagihanSiswa = "{{route('bayar.tagihanSiswa')}}",
+	routeInvoice = "{{route('bayar.invoice')}}"
 	$(async function () {
 		// await dataTable()
 		// renderJenis()
+		modalPrintAll.modal({
+			backdrop: 'static'
+		})
+		$(btnPrintAll).hide();
 		$('#siswa_id').select2({
 			width: "resolve",
 			allowEmpty: true,
@@ -154,6 +214,7 @@
             }).done(function(result) {
                 if (result.status == 'success') {
                     setAnggota(result.data);
+                    setRiwayat(result.data.transaksi);
                 } else {
                     swalError();
                 }
@@ -167,6 +228,22 @@
 		$('#siswa_tahun_masuk').html(data.tahun_masuk);
 		$('#siswa_jenis_kelamin').html(data.jenis_kelamin);
 		$('#siswa_kelas_siswa').html(data.kelas_siswa.length?data.kelas_siswa[0].kelas.nama:'tidak ada');
+	}
+
+	function setRiwayat(data) {
+		$(tabelRiwayat).html('');
+		let dataLength = data.length
+		data.forEach((e,i) => {
+			let html = `
+				<tr>
+					<td>${dataLength-i}</td>
+					<td>${e.kode}</td>
+					<td>${e.tanggal_transaksi}</td>
+					<td><a href='${routeInvoice}/${e.id}' target='blank'><button class='btn btn-sm btn-warning text-white'><i class='fa fa-print'></i></button></a></td>
+				</tr>
+			`;
+			$(tabelRiwayat).append(html);
+		});
 	}
 
 	$(btnReload).click(function (e) { 
@@ -346,5 +423,10 @@
 			swalError()
 		})
 	}
+
+	$(btnPrintAll).click(function (e) { 
+		e.preventDefault();
+		
+	});
 </script>
 @endpush
