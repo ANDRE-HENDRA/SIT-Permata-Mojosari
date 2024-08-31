@@ -118,9 +118,10 @@
 								<label>Cari Transaksi</label>
 								<select class="form-control select2" 
 									style="width: 100%"
-									onchange="triggerPilihSiswa()"
+									{{-- onchange="triggerPilihSiswa()" --}}
 									id="transaksi_id" 
-									name="transaksi_id"
+									name="transaksi_id[]"
+									multiple
 								>
 								</select>
 							</div>
@@ -138,7 +139,7 @@
 				
 				<!-- Modal footer -->
 				<div class="modal-footer">
-					<button class="btn btn-info btnSimpan" name="addsiswa">Submit</button>
+					<button class="btn btn-info btnSubmitPrintAll" name="addsiswa">Submit</button>
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 				</div>
 			</div>
@@ -150,8 +151,10 @@
 <script>
 	var btnAdd = $('.btnAdd'),
 	btnPrintAll = $('.btnPrintAll'),
+	btnSubmitPrintAll = $('.btnSubmitPrintAll'),
 	btnAddHtml = $(btnAdd).html(),
 	btnPrintAllHtml = $(btnPrintAll).html(),
+	btnSubmitPrintAllHtml = $(btnSubmitPrintAll).html(),
 	modalPrintAll = $('#modalPrintAll'),
 	modalArea = $('.modalArea'),
 	bayarBody = $('#bayar-body'),
@@ -163,13 +166,17 @@
 	routeJenisPembayaranDelete = "{{route('jenisPembayaran.delete')}}",
 	routeJenisPembayaranList = "{{route('bayar.jenisPembayaran')}}",
 	routeTagihanSiswa = "{{route('bayar.tagihanSiswa')}}",
-	routeInvoice = "{{route('bayar.invoice')}}"
+	routeInvoice = "{{route('bayar.invoice')}}",
+	routeGetRiwayatBayar = "{{route('bayar.getRiwayatBayar')}}",
+	routeInvoiceBulk = "{{route('bayar.invoiceBulk')}}",
+	siswa_id = ''
 	$(async function () {
 		// await dataTable()
 		// renderJenis()
-		// modalPrintAll.modal({
-		// 	backdrop: 'static'
-		// })
+		modalPrintAll.modal({
+			backdrop: 'static',
+			show: false
+		})
 		$(btnPrintAll).hide();
 		$('#siswa_id').select2({
 			width: "resolve",
@@ -198,12 +205,42 @@
 				cache: true,
 			}
 		});
-		
+		$('#transaksi_id').select2({
+			width: "resolve"
+		})
+		// $('#transaksi_id').select2({
+		// 	width: "resolve",
+		// 	ajax: {
+		// 		url: "{{ route('kelasSiswa.cariSiswa') }}",
+		// 		dataType: 'json',
+		// 		type: 'POST',
+		// 		delay: 250,
+		// 		data: function(params) {
+		// 			var query = {
+		// 				q: params.term,
+		// 				siswa_id: siswa_id
+		// 			}
+		// 			return query;
+		// 		},
+		// 		processResults: function(data) {
+		// 			return {
+		// 				results: $.map(data, function(item) {
+		// 					return {
+		// 						text: '(' + item.id + ') ' + item.nama,
+		// 						id: item.id,
+		// 					}
+		// 				})
+		// 			};
+		// 		},
+		// 		cache: true,
+		// 	}
+		// });
 	});
 
 	function triggerCariSiswa() {
 		renderJenis()
 		getSiswa()
+		siswa_id=$('#siswa_id').val();
 	}
 
 	function getSiswa() {
@@ -228,6 +265,7 @@
 		$('#siswa_tahun_masuk').html(data.tahun_masuk);
 		$('#siswa_jenis_kelamin').html(data.jenis_kelamin);
 		$('#siswa_kelas_siswa').html(data.kelas_siswa.length?data.kelas_siswa[0].kelas.nama:'tidak ada');
+		$(btnPrintAll).show();
 	}
 
 	function setRiwayat(data) {
@@ -426,7 +464,34 @@
 
 	$(btnPrintAll).click(function (e) { 
 		e.preventDefault();
-		
+		$(btnPrintAll).html(spinnerSr);
+		$('#transaksi_id').html('');
+		$.post(routeGetRiwayatBayar, {
+			siswa_id:siswa_id
+		}).done(function(result) {
+			$(btnPrintAll).html(btnPrintAllHtml);
+			if (result.status == 'success') {
+				result.data.forEach(element => {
+					$('#transaksi_id').append(`
+						<option value="${element.id}">${element.kode}</option>
+					`);
+				});
+				modalPrintAll.modal('show')
+			} else {
+				$(btnPrintAll).html(btnPrintAllHtml);
+				modalPrintAll.modal('hide')
+				swalError();
+			}
+		}).fail((err)=>{
+			modalPrintAll.modal('hide')
+			$(btnPrintAll).html(btnPrintAllHtml);
+			swalError();
+		});
+	});
+
+	$(btnSubmitPrintAll).click(function (e) { 
+		e.preventDefault();
+		window.open(routeInvoiceBulk+'/?id='+$('#transaksi_id').val(), '_blank').focus();
 	});
 </script>
 @endpush
