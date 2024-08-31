@@ -142,46 +142,49 @@
 						</div>
 					</div>
 				</div>
-				
+				@if (count($transaksi)>0)
 				<div class="row">
 					<div class="receipt-header receipt-header-mid">
 						<div class="col-xs-8 col-sm-8 col-md-8 text-left">
 							<div class="receipt-right">
-								<P><b>Nama :</b> {{$transaksi->siswa->nama}}</P>
-								<p><b>Nis :</b> {{$transaksi->siswa->nis}}</p>
-								<p><b>Nisn :</b> {{$transaksi->siswa->nisn}}</p>
-								<p><b>Kelas :</b> {{$transaksi->kelas}}</p>
-								<p><b>Jenis Pembayaran :</b> {{$transaksi->jenis_pembayaran}}</p>
-								<p><b>Tanggal transaksi :</b> {{$transaksi->tanggal_transaksi}}</p>
+								<P><b>Nama :</b> {{$transaksi[0]->siswa->nama}}</P>
+								<p><b>Nis :</b> {{$transaksi[0]->siswa->nis}}</p>
+								<p><b>Nisn :</b> {{$transaksi[0]->siswa->nisn}}</p>
+								<p><b>Kelas :</b> {{$transaksi[0]->kelas}}</p>
 							</div>
 						</div>
 						<div class="col-xs-4 col-sm-4 col-md-4">
-							<div class="receipt-left">
-								<h3>INVOICE # {{$transaksi->kode}}</h3>
-							</div>
+							{{-- <div class="receipt-left">
+								<h3>INVOICE # {{$transaksi[0]->kode}}</h3>
+							</div> --}}
 						</div>
 					</div>
 				</div>
+				@endif
 				
 				<div>
 					<table class="table">
 						<thead>
 							<tr>
-								<th width="70%">Deskripsi</th>
-								<th width="30%">Nominal</th>
+								<th width="25%">Pembayaran</th>
+								<th width="25%">No Invoice</th>
+								<th width="25%">Tanggal</th>
+								<th width="25%">Nominal</th>
 							</tr>
 						</thead>
 						<tbody>
-							@foreach ($transaksi->pembayaran->detail_pembayaran as $item)
+							@foreach ($transaksi as $item)
 							<tr>
-								<td class="col-md-9">{{$item->keterangan}}</td>
+								<td class="col-md-3">{{$item->jenis_pembayaran}}</td>
+								<td class="col-md-3">{{$item->kode}}</td>
+								<td class="col-md-3">{{$item->tanggal_transaksi}}</td>
 								<td class="col-md-3"><i class="fa fa-inr"></i> {!! Help::currencyFormatDecimal($item->nominal) !!}</td>
 							</tr>
 							@endforeach
 							<tr>
 								
-								<td class="text-right"><h2><strong>Total: </strong></h2></td>
-								<td class="text-left text-danger"><h2><strong><i class="fa fa-inr"></i> {!! Help::currencyFormatDecimal($transaksi->nominal) !!}</strong></h2></td>
+								<td colspan="3" class="text-right"><h2><strong>Total: </strong></h2></td>
+								<td class="text-left text-danger"><h2><strong><i class="fa fa-inr"></i> {!! Help::currencyFormatDecimal($nominal) !!}</strong></h2></td>
 							</tr>
 						</tbody>
 					</table>
@@ -191,20 +194,17 @@
 					<div class="receipt-header receipt-header-mid receipt-footer">
 						<div class="col-xs-6 col-sm-6 col-md-6 text-left">
 							<div class="receipt-right">
-								<p><b>Date :</b>{{$transaksi->tanggal_transaksi}}</p>
+								<p><b>Print Date :</b>{{date('Y-m-d')}}</p>
 								<h5 style="color: rgb(140, 140, 140);">SIT Permata Meri</h5>
 							</div>
 						</div>
 						<div class="col-xs-2 col-sm-2 col-md-2">
-						@if ($transaksi->is_lunas)
-							<img src="{{asset('img/lunas.png')}}" alt="" style="width:100%;padding-left:-20px">
-						@endif
 						</div>
 						<div class="col-xs-2 col-sm-2 col-md-2">
 							<div class="receipt-left">
 								{{-- <h1>Stamp</h1> --}}
 								<div style="width: 20%">
-									{!! QrCode::size(82)->generate($transaksi->kode) !!}
+									{!! QrCode::size(82)->generate($kode) !!}
 								</div>
 								{{-- <img src="data:image/png;base64, " alt=""> --}}
 							</div>

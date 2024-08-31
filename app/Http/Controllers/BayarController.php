@@ -140,6 +140,14 @@ class BayarController extends Controller
 		return response()->json($data, 200);
 	}
 
+	// public function cariRiwayatBayar(Request $request)
+	// {
+	// 	$text_search = $request->q ?? '';
+	// 	$data =  Transaksi::where('tr', 'like', "%$text_search%")->where('siswa_id', $request->siswa_id)
+	// 		->get();
+	// 	return response()->json($data, 200);
+	// }
+
 	public function getSiswa(Request $request)
 	{
 		$curTahunAjaran = in_array(date('m'), [1, 2, 3, 4, 5, 6]) ? date('Y', strtotime(' +1 year')) : date('Y');
@@ -155,6 +163,12 @@ class BayarController extends Controller
 		})
 		->find($request->siswa_id);
 		return ['status' => 'success', 'data' => $siswa];
+	}
+
+	public function getRiwayatBayar(Request $request)
+	{
+		$transaksi = Transaksi::where('siswa_id', $request->siswa_id)->get();
+		return ['status' => 'success', 'data' => $transaksi];
 	}
 
 	public function store(Request $request)
@@ -251,7 +265,7 @@ class BayarController extends Controller
 		}
 	}
 
-	public function invoice($id = 1)
+	public function invoice($id = 0)
 	{
 		$data['transaksi'] = Transaksi::with('siswa')
 			->with(['pembayaran' => function ($q) {
@@ -259,6 +273,18 @@ class BayarController extends Controller
 			}])
 			->find($id);
 		return view('pages.bayar.invoice', $data);
+	}
+
+	public function invoiceBulk(Request $request)
+	{
+		$idArr=explode(',',$request->get('id'));
+		$data['transaksi'] = Transaksi::with('siswa')
+			->with('pembayaran')
+			->whereIn('id',$idArr)
+			->get();
+		$data['nominal'] = $data['transaksi']->sum('nominal');
+		$data['kode'] = implode('|',$data['transaksi']->pluck('kode')->toArray());
+		return view('pages.bayar.invoice-bulk', $data);
 	}
 
 	public function getTagihan(Request $request)

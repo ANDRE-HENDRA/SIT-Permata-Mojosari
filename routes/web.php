@@ -157,7 +157,10 @@ Route::middleware('auth')
 				Route::post('/cari-siswa', 'cari_siswa')->name('cari_siswa');
 				Route::post('/get-siswa', 'getSiswa')->name('getSiswa');
 				Route::get('/invoice/{id?}', 'invoice')->name('invoice');
+				Route::get('/invoice-bulk', 'invoiceBulk')->name('invoiceBulk');
 				Route::post('/get-tagihan', 'getTagihan')->name('getTagihan');
+				// Route::post('/cari-riwayat-bayar', 'cariRiwayatBayar')->name('cariRiwayatBayar');
+				Route::post('/get-riwayat-bayar', 'getRiwayatBayar')->name('getRiwayatBayar');
 			});
 
 		Route::controller(LaporanController::class)
